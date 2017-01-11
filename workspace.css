@@ -142,3 +142,14 @@ body.hover {
 .noheight {
     height:0;
 }
+
+#grblWidgetControlMenu{
+  background-color: red;
+  display:none;
+  z-index: 1000;
+  width: 10rem;
+  margin: 1rem;
+}
+#grblWidgetControlMenu .btn-block{
+ width: 8rem;   
+}
