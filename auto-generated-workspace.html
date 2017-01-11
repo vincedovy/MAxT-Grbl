@@ -386,7 +386,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
          */
         loadWorkspaceMenu: function(callback) {
             // Workspace Menu with Workspace Billboard
-            
+
             var that = this;
             chilipeppr.load(
                 "http://fiddle.jshell.net/chilipeppr/zMbL9/show/light/",
@@ -443,7 +443,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-ws-autolevel
             // hiding auto leveller as unsure what features supported in grbl. will come back to this.
             // http:jsfiddle.net/jarret/uvVL6/
-            
+
             chilipeppr.load(
                 "#com-chilipeppr-ws-autolevel",
                 "http://raw.githubusercontent.com/chilipeppr-grbl/grbl-widget-autolevel/master/auto-generated-widget.html",
@@ -655,7 +655,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                         var that = this;
                         chilipeppr.load(
                             "#com-chilipeppr-ws-eagle",
-                            "http://raw.githubusercontent.com/chilipeppr/widget-eagle/master/auto-generated-widget.html",
+                            "http://raw.githubusercontent.com/jpadie/widget-eagle-jpa-fork/master/auto-generated-widget.html",
                             function() {
                                 require(["inline:com-chilipeppr-widget-eagle"], function(eagle) {
                                     that.eagleInstance = eagle;
@@ -1321,7 +1321,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 });
 
 
-             // Gcode List v3
+            // Gcode List v3
             // OLD v2 http://jsfiddle.net/chilipeppr/F2Qn3/
             // NEW v3 with onQueue/onWrite/onComplete http://jsfiddle.net/chilipeppr/a4g5ds5n/
             chilipeppr.load("#com-chilipeppr-gcode-list",
@@ -1337,8 +1337,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     );
                 }
             ); //End Gcode List v3
-            
-            
+
+
             //Axes Widget XYZA
             //This widget is locked at version 97 until upgrades can be tested with the override code.
             chilipeppr.load(
@@ -1622,7 +1622,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // GRBL
             // http://jsfiddle.net/jarret/b5L2rtgc/ //alternate test version of grbl controller
             // com-chilipeppr-grbl
-            
+
             chilipeppr.load(
                 "#com-chilipeppr-grbl-instance",
                 "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
@@ -1639,7 +1639,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     );
                 }
             );
-       
+
             /*
             // WebRTC Client com-chilipeppr-webrtcclient
             chilipeppr.load(
