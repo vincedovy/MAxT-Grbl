@@ -1321,22 +1321,24 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 });
 
 
-            // Gcode List
-            // http://jsfiddle.net/chilipeppr/a4g5ds5n/
+             // Gcode List v3
+            // OLD v2 http://jsfiddle.net/chilipeppr/F2Qn3/
+            // NEW v3 with onQueue/onWrite/onComplete http://jsfiddle.net/chilipeppr/a4g5ds5n/
             chilipeppr.load("#com-chilipeppr-gcode-list",
-                "http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
-                //"http://jsfiddle.net/jarret/0a53jy0x/show/light",
-
+                "http://raw.githubusercontent.com/chilipeppr/widget-gcodelist/master/auto-generated-widget.html",
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-gcode"],
-
                         function(gcodelist) {
-                            gcodelist.init();
-                        });
-                });
-
-
+                            gcodelist.init({
+                                lineNumbersOnByDefault: true
+                            });
+                        }
+                    );
+                }
+            ); //End Gcode List v3
+            
+            
             //Axes Widget XYZA
             //This widget is locked at version 97 until upgrades can be tested with the override code.
             chilipeppr.load(
