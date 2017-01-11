@@ -174,7 +174,7 @@ body.hover {
 
     <script type='text/javascript'>
     //<![CDATA[
-/* global cpdefine chilipeppr cprequire */
+/* global cpdefine chilipeppr cprequire $ */
 cprequire_test(["inline:com-chilipeppr-workspace-grbl"], function(ws) {
 
     console.log("initting workspace");
@@ -1717,6 +1717,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             <div id="com-chilipeppr-ws-gcode-dragdrop" xstyle="margin-right:6px;" class="pull-left"></div>
 
+                            <!--
                             <div class="dropdown pull-left">
                                 <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     Widgets
@@ -1737,53 +1738,50 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             data-trigger="hover" data-delay="100">Touch Plate</button></li>
                                 </ul>
                             </div>
+                            -->
 
                         </div>
-                        <!-- Zipwhip Text Messaging -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-zipwhip"></div>
-                        <!-- Auto Leveller -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-autolevel">Auto-Level Here</div>
-                        <!-- Macro -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-macro">Macro Here</div>
-                        <!-- JScut -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-jscut">Jscut Here</div>
-                        <!-- Eagle BRD -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-eagle">Eagle BRD Here</div>
-                        <!-- GPIO -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-gpio">GPIO Here</div>
-
-                        <!-- shuttlexpress -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-shuttlexpress">ShuttleXpress Here</div>
-
-                        <!-- Touch Plate -->
-                        <div class="zhigh hidden" id="com-chilipeppr-ws-touchplate">Touch Plate Here</div>
-
-                        <!-- Gcode List -->
-                        <div id="com-chilipeppr-gcode-list" class="zhigh">Load Gcode List Here</div>
-                        <!-- Serial In/Out Text Log-->
-                        <div id="com-chilipeppr-serialport-log" class="zhigh">Load Serial Port Log Here</div>
                     </div>
-                    <!-- 3D Viewer -->
-                    <div class="widget col-xs-6">
-                        <div class="">
-                            <div id="com-chilipeppr-3dviewer-controlpanel" style=""></div>
-                        </div>
+                    <!-- Zipwhip Text Messaging -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-zipwhip"></div>
+                    <!-- Auto Leveller -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-autolevel">Auto-Level Here</div>
+                    <!-- Macro -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-macro">Macro Here</div>
+                    <!-- JScut -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-jscut">Jscut Here</div>
+                    <!-- Eagle BRD -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-eagle">Eagle BRD Here</div>
+                    <!-- GPIO -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-gpio">GPIO Here</div>
+                    <!-- shuttlexpress -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-shuttlexpress">ShuttleXpress Here</div>
+                    <!-- Touch Plate -->
+                    <div class="zhigh hidden" id="com-chilipeppr-ws-touchplate">Touch Plate Here</div>
+                    <!-- Gcode List -->
+                    <div id="com-chilipeppr-gcode-list" class="zhigh">Load Gcode List Here</div>
+                    <!-- Serial In/Out Text Log-->
+                    <div id="com-chilipeppr-serialport-log" class="zhigh">Load Serial Port Log Here</div>
+                </div>
+                <!-- 3D Viewer -->
+                <div class="widget col-xs-6">
+                    <div class="">
+                        <div id="com-chilipeppr-3dviewer-controlpanel" style=""></div>
                     </div>
-                    <div class="col-xs-3 nopadding">
-                        <!-- XYZ -->
-                        <div id="com-chilipeppr-xyz" class="">Load XYZ Here</div>
-                        <!-- Tinyg -->
-                        <div id="com-chilipeppr-grbl-instance" class="">Load GRBL Here</div>
-                        <!-- WebRTC Client -->
-                        <!--<div id="com-chilipeppr-webrtcclient" class="">Load WebRTC Client Here</div>-->
-                        <!-- Serial Port Selector -->
-                        <div id="com-chilipeppr-serialport-spselector" class="">Load Serial Port Selector Here</div>
-                    </div>
+                </div>
+                <div class="col-xs-3 nopadding">
+                    <!-- XYZ -->
+                    <div id="com-chilipeppr-xyz" class="">Load XYZ Here</div>
+                    <!-- Tinyg -->
+                    <div id="com-chilipeppr-grbl-instance" class="">Load GRBL Here</div>
+                    <!-- WebRTC Client -->
+                    <!--<div id="com-chilipeppr-webrtcclient" class="">Load WebRTC Client Here</div>-->
+                    <!-- Serial Port Selector -->
+                    <div id="com-chilipeppr-serialport-spselector" class="">Load Serial Port Selector Here</div>
                 </div>
             </div>
         </div>
-
-
+    </div>
 </body>
 
 </html>
