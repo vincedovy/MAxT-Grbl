@@ -1450,13 +1450,13 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-grbl
 
             chilipeppr.load(
-                "#com-chilipeppr-grbl-instance",
+                "#com-chilipeppr-widget-grbl-instance",
                 "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
                 function() {
                     // Callback after widget loaded into #myDivWidgetGrbl
                     // Now use require.js to get reference to instantiated widget
                     cprequire(
-                        ["inline:com-chilipeppr-widget-grbl-instance"], // the id you gave your widget
+                        ["inline:com-chilipeppr-widget-grbl"], // the id you gave your widget
                         function(myObjWidgetGrbl) {
                             // Callback that is passed reference to the newly loaded widget
                             console.log("Widget / GRBL1 Compatibility Test just got loaded.", myObjWidgetGrbl);
