@@ -1652,7 +1652,32 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
         },
 
+        /**
+         * Load the workspace menu and show the pubsubviewer and fork links using
+         * our pubsubviewer widget that makes those links for us.
+         */
+        loadWorkspaceMenu: function(callback) {
+            // Workspace Menu with Workspace Billboard
+            var that = this;
+            chilipeppr.load(
+                "http://fiddle.jshell.net/chilipeppr/zMbL9/show/light/",
+                function() {
+                    require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
 
+                        var el = $('#' + that.id + ' .com-chilipeppr-ws-menu .dropdown-menu-ws');
+                        console.log("got callback for attachto menu for workspace. attaching to el:", el);
+
+                        pubsubviewer.attachTo(
+                            el,
+                            that,
+                            "Workspace"
+                        );
+
+                        if (callback) callback();
+                    });
+                }
+            );
+        },
 
     }
 });
