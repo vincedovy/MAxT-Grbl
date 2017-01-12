@@ -1,4 +1,4 @@
-/* global cpdefine chilipeppr cprequire $ */
+/* global cpdefine chilipeppr cprequire */
 cprequire_test(["inline:com-chilipeppr-workspace-grbl"], function(ws) {
 
     console.log("initting workspace");
@@ -31,6 +31,7 @@ cprequire_test(["inline:com-chilipeppr-workspace-grbl"], function(ws) {
     $('body').css('padding', '10px');
 
 } /*end_test*/ );
+
 // This is the main definition of your widget. Give it a unique name.
 cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function() {
     return {
@@ -38,7 +39,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
          * The ID of the widget. You must define this and make it unique.
          */
         id: "com-chilipeppr-workspace-grbl", // Make the id the same as the cpdefine id
-        name: "A CP workspace to test grbl 1.1 compliance ", // The descriptive name of your widget.
+        name: "Workspace / grbl", // The descriptive name of your widget.
         desc: `A ChiliPeppr Workspace grbl.`,
         url: "(auto fill by runme.js)", // The final URL of the working widget as a single HTML file with CSS and Javascript inlined. You can let runme.js auto fill this if you are using Cloud9.
         fiddleurl: "(auto fill by runme.js)", // The edit URL. This can be auto-filled by runme.js in Cloud9 if you'd like, or just define it on your own to help people know where they can edit/fork your widget
@@ -206,6 +207,32 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 }
             );
         },
+        /**
+         * Load the workspace menu and show the pubsubviewer and fork links using
+         * our pubsubviewer widget that makes those links for us.
+         */
+        loadWorkspaceMenu: function(callback) {
+            // Workspace Menu with Workspace Billboard
+            var that = this;
+            chilipeppr.load(
+                "http://fiddle.jshell.net/chilipeppr/zMbL9/show/light/",
+                function() {
+                    require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
+
+                        var el = $('#' + that.id + ' .com-chilipeppr-ws-menu .dropdown-menu-ws');
+                        console.log("got callback for attachto menu for workspace. attaching to el:", el);
+
+                        pubsubviewer.attachTo(
+                            el,
+                            that,
+                            "Workspace"
+                        );
+
+                        if (callback) callback();
+                    });
+                }
+            );
+        },
 
 
         loadWidgets: function(callback) {
@@ -242,7 +269,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-ws-autolevel
             // hiding auto leveller as unsure what features supported in grbl. will come back to this.
             // http:jsfiddle.net/jarret/uvVL6/
-
+            
             chilipeppr.load(
                 "#com-chilipeppr-ws-autolevel",
                 "http://raw.githubusercontent.com/chilipeppr-grbl/grbl-widget-autolevel/master/auto-generated-widget.html",
@@ -454,7 +481,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                         var that = this;
                         chilipeppr.load(
                             "#com-chilipeppr-ws-eagle",
-                            "http://raw.githubusercontent.com/jpadie/widget-eagle-jpa-fork/master/auto-generated-widget.html",
+                            "http://raw.githubusercontent.com/chilipeppr/widget-eagle/master/auto-generated-widget.html",
                             function() {
                                 require(["inline:com-chilipeppr-widget-eagle"], function(eagle) {
                                     that.eagleInstance = eagle;
@@ -1120,22 +1147,20 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 });
 
 
-            // Gcode List v3
-            // OLD v2 http://jsfiddle.net/chilipeppr/F2Qn3/
-            // NEW v3 with onQueue/onWrite/onComplete http://jsfiddle.net/chilipeppr/a4g5ds5n/
+            // Gcode List
+            // http://jsfiddle.net/chilipeppr/a4g5ds5n/
             chilipeppr.load("#com-chilipeppr-gcode-list",
-                "http://raw.githubusercontent.com/jpadie/widget-gcodelist-jpaFork/master/auto-generated-widget.html",
+                "http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
+                //"http://jsfiddle.net/jarret/0a53jy0x/show/light",
+
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-gcode"],
+
                         function(gcodelist) {
-                            gcodelist.init({
-                                lineNumbersOnByDefault: true
-                            });
-                        }
-                    );
-                }
-            ); //End Gcode List v3
+                            gcodelist.init();
+                        });
+                });
 
 
             //Axes Widget XYZA
@@ -1421,23 +1446,21 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // GRBL
             // http://jsfiddle.net/jarret/b5L2rtgc/ //alternate test version of grbl controller
             // com-chilipeppr-grbl
-
             chilipeppr.load(
-                "#com-chilipeppr-widget-grbl-instance",
-                "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
+                "com-chilipeppr-grbl",
+                "http://fiddle.jshell.net/jarret/9aaL8jg4/show/light/",
+
                 function() {
-                    // Callback after widget loaded into #myDivWidgetGrbl
-                    // Now use require.js to get reference to instantiated widget
                     cprequire(
-                        ["inline:com-chilipeppr-widget-grbl"], // the id you gave your widget
-                        function(myObjWidgetGrbl) {
-                            // Callback that is passed reference to the newly loaded widget
-                            console.log("Widget / GRBL1 Compatibility Test just got loaded.", myObjWidgetGrbl);
-                            myObjWidgetGrbl.init();
-                        }
-                    );
-                }
-            );
+                        ["inline:com-chilipeppr-widget-grbl"], //"inline:com-chilipeppr-widget-spconsole"],
+                        //, "inline:com-chilipeppr-serialport-spselector"],
+
+                        function(grbl) { //,spconsole) {
+
+                            grbl.init();
+
+                        });
+                });
 
             /*
             // WebRTC Client com-chilipeppr-webrtcclient
@@ -1478,32 +1501,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
         },
 
-        /**
-         * Load the workspace menu and show the pubsubviewer and fork links using
-         * our pubsubviewer widget that makes those links for us.
-         */
-        loadWorkspaceMenu: function(callback) {
-            // Workspace Menu with Workspace Billboard
-            var that = this;
-            chilipeppr.load(
-                "http://fiddle.jshell.net/chilipeppr/zMbL9/show/light/",
-                function() {
-                    require(['inline:com-chilipeppr-elem-pubsubviewer'], function(pubsubviewer) {
 
-                        var el = $('#' + that.id + ' .com-chilipeppr-ws-menu .dropdown-menu-ws');
-                        console.log("got callback for attachto menu for workspace. attaching to el:", el);
-
-                        pubsubviewer.attachTo(
-                            el,
-                            that,
-                            "Workspace"
-                        );
-
-                        if (callback) callback();
-                    });
-                }
-            );
-        },
 
     }
 });
