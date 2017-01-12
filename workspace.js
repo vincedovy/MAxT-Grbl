@@ -72,7 +72,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             //this.loadTemplateWidget();
 
             // Create our workspace upper right corner triangle menu
-         //   this.loadWorkspaceMenu();
+            this.loadWorkspaceMenu();
             // Add our billboard to the menu (has name, url, picture of workspace)
             this.addBillboardToWorkspaceMenu();
 
