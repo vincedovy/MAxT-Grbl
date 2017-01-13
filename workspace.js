@@ -237,10 +237,12 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
         loadWidgets: function(callback) {
 
+            console.log('WORKSPACE: loading widgets');
             // Load top bar elements
 
             // Zipwhip texting
             // com-chilipeppr-ws-zipwhip
+            console.log('WORKSPACE: loading zipwhip');
             chilipeppr.load(
                 "#com-chilipeppr-ws-zipwhip",
                 "http://fiddle.jshell.net/chilipeppr/56X9G/show/light/",
@@ -270,6 +272,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // hiding auto leveller as unsure what features supported in grbl. will come back to this.
             // http:jsfiddle.net/jarret/uvVL6/
             
+            console.log('WORKSPACE: loading autolevel');
             chilipeppr.load(
                 "#com-chilipeppr-ws-autolevel",
                 "http://raw.githubusercontent.com/chilipeppr-grbl/grbl-widget-autolevel/master/auto-generated-widget.html",
@@ -320,6 +323,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Macro
             // com-chilipeppr-ws-macro
+            console.log('WORKSPACE: loading macro');
             chilipeppr.load(
                 "#com-chilipeppr-ws-macro",
                 "http://raw.githubusercontent.com/chilipeppr/widget-macro/master/auto-generated-widget.html",
@@ -412,6 +416,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // JScut
             // com-chilipeppr-ws-jscut
+            console.log('WORKSPACE: loading jscut');
             chilipeppr.load(
                 "#com-chilipeppr-ws-jscut",
                 "http://fiddle.jshell.net/chilipeppr/7ZzSV/show/light/",
@@ -575,6 +580,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Dynamically load the GPIO widget, i.e. wait til user clicks on the button
             // first time.
+            console.log('WORKSPACE: loading GPIO Widget');
             var gpioObj = {
                 gpioBtn: null,
                 gpioDiv: null,
@@ -637,6 +643,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             };
             gpioObj.init();
 
+            console.log('WORKSPACE: loading shuttleExpress');
 
             // SuttleXpress
             // Dynamically load the ShuttleXpress Widget. i.e. wait til user clicks on 
@@ -707,6 +714,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             shuttlexpressObj.init();
 
 
+            console.log('WORKSPACE: loading touch plate widget');
+
             var touchPlateObj = {
                 touchPlateBtn: null,
                 touchPlateDiv: null,
@@ -772,6 +781,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // Element / Drag Drop
             // Load the dragdrop element into workspace toolbar
             // http://jsfiddle.net/chilipeppr/Z9F6G/
+            console.log('WORKSPACE: loading drag drop widget');
+            
             chilipeppr.load("#com-chilipeppr-ws-gcode-dragdrop",
                 "http://fiddle.jshell.net/chilipeppr/Z9F6G/show/light/",
                 function() {
@@ -802,6 +813,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Workspace Menu with Workspace Billboard
             // http://jsfiddle.net/jlauer/yC8Hv/
+            
+            console.log('WORKSPACE: loading billboard');
             chilipeppr.load(
                 "#com-chilipeppr-ws-gcode-menu-billboard",
                 "http://fiddle.jshell.net/chilipeppr/6z76Z/show/light/");
@@ -832,6 +845,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // 3D Viewer
             // http://jsfiddle.net/chilipeppr/y3HRF
+            console.log('WORKSPACE: loading 3d viewer');
             chilipeppr.load("#com-chilipeppr-3dviewer",
                 //"http://fiddle.jshell.net/chilipeppr/y3HRF/show/light/",
                 "http://raw.githubusercontent.com/chilipeppr/widget-3dviewer/master/auto-generated-widget.html",
@@ -1149,6 +1163,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Gcode List
             // http://jsfiddle.net/chilipeppr/a4g5ds5n/
+            console.log('WORKSPACE: loading gcode list');
             chilipeppr.load("#com-chilipeppr-gcode-list",
                 "http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
                 //"http://jsfiddle.net/jarret/0a53jy0x/show/light",
@@ -1165,6 +1180,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             //Axes Widget XYZA
             //This widget is locked at version 97 until upgrades can be tested with the override code.
+            console.log('WORKSPACE: loading axis widget');
             chilipeppr.load(
                 "com-chilipeppr-xyz",
                 "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
@@ -1360,7 +1376,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 });
 
 
-
+            console.log('WORKSPACE: loading macros at line 1379');
             chilipeppr.load(
                 "#com-chilipeppr-ws-macro",
                 "http://jsfiddle.net/forstuvning/3gmfmnna/8/show/light/",
@@ -1391,6 +1407,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Serial Port Log Window
             // http://jsfiddle.net/chilipeppr/rczajbx0/
+            console.log('WORKSPACE: loading serial port log');
             chilipeppr.load("#com-chilipeppr-serialport-log",
                 "http://fiddle.jshell.net/chilipeppr/rczajbx0/show/light/",
 
@@ -1446,6 +1463,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // GRBL
             // http://jsfiddle.net/jarret/b5L2rtgc/ //alternate test version of grbl controller
             // com-chilipeppr-grbl
+            
+            console.log('WORKSPACE: loading grbl widget');
             chilipeppr.load(
                 "#com-chilipeppr-widget-grbl-instance",
                 "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
@@ -1480,6 +1499,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Serial Port Selector
             // http://jsfiddle.net/chilipeppr/vetj5fvx/
+            console.log('WORKSPACE: loading serialport selector');
             chilipeppr.load("com-chilipeppr-serialport-spselector",
                 "http://fiddle.jshell.net/chilipeppr/vetj5fvx/show/light/",
 
