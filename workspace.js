@@ -271,7 +271,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-ws-autolevel
             // hiding auto leveller as unsure what features supported in grbl. will come back to this.
             // http:jsfiddle.net/jarret/uvVL6/
-            
+
             console.log('WORKSPACE: loading autolevel');
             chilipeppr.load(
                 "#com-chilipeppr-ws-autolevel",
@@ -782,7 +782,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // Load the dragdrop element into workspace toolbar
             // http://jsfiddle.net/chilipeppr/Z9F6G/
             console.log('WORKSPACE: loading drag drop widget');
-            
+
             chilipeppr.load("#com-chilipeppr-ws-gcode-dragdrop",
                 "http://fiddle.jshell.net/chilipeppr/Z9F6G/show/light/",
                 function() {
@@ -813,7 +813,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
             // Workspace Menu with Workspace Billboard
             // http://jsfiddle.net/jlauer/yC8Hv/
-            
+
             console.log('WORKSPACE: loading billboard');
             chilipeppr.load(
                 "#com-chilipeppr-ws-gcode-menu-billboard",
@@ -1463,12 +1463,12 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // GRBL
             // http://jsfiddle.net/jarret/b5L2rtgc/ //alternate test version of grbl controller
             // com-chilipeppr-grbl
-            
+
             console.log('WORKSPACE: loading grbl widget');
             chilipeppr.load(
                 "#com-chilipeppr-widget-grbl-instance",
                 "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
- 
+
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-grbl"], //"inline:com-chilipeppr-widget-spconsole"],
