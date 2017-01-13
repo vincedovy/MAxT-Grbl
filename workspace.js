@@ -1447,9 +1447,9 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // http://jsfiddle.net/jarret/b5L2rtgc/ //alternate test version of grbl controller
             // com-chilipeppr-grbl
             chilipeppr.load(
-                "com-chilipeppr-grbl",
-                "http://fiddle.jshell.net/jarret/9aaL8jg4/show/light/",
-
+                "com-chilipeppr-widget-grbl-instance",
+                "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
+ 
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-grbl"], //"inline:com-chilipeppr-widget-spconsole"],
