@@ -1182,8 +1182,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             //This widget is locked at version 97 until upgrades can be tested with the override code.
             console.log('WORKSPACE: loading axis widget');
             chilipeppr.load(
-                "com-chilipeppr-xyz",
-                "http://raw.githubusercontent.com/jpadie/widget-axes/master/auto-generated-widget.html",
+                "com-chilipeppr-xyz-instance",
+                "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
 
                 function() {
                     cprequire(
@@ -1191,6 +1191,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                         function(xyz) {
                             //overwrite the G28 homing process with grbl's $H homing
+
                             var oldHomeAxis = xyz.homeAxis.bind(xyz);
                             var newHomeAxis = function(data) {
                                 var cmd = "$H\n";
@@ -1204,6 +1205,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             };
                             xyz.homeAxis = newHomeAxis;
                             xyz.sendDone = newSendDone;
+
 
                             xyz.updateAxesFromStatus = function(axes) {
                                 console.log("updateAxesFromStatus:", axes);
