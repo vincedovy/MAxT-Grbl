@@ -1379,8 +1379,14 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             };
                             xyz.homeAxis = newHomeAxis;
                             xyz.sendDone = newSendDone;
+                            xyz.grblVersion = '';
+                            xyz.setGrblVersion = function(version) {
+                                console.log('AXIS WIDGET: new grbl version received', version);
+                                xyz.grblVersion = version;
+                                console.log('AXIS WIDGET: new grbl version received - double check', xyz.grblVersion);
+                            };
 
-
+                            chilipeppr.subscribe("/com-chilipeppr-cnccontroller-instance/grblVersion", xyz, xyz.setGrblVersion);
                             xyz.updateAxesFromStatus = function(axes) {
                                 console.log("updateAxesFromStatus:", axes);
 
