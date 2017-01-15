@@ -1203,6 +1203,11 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             var newSendDone = function(data) {
 
                             };
+                            var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
+                                alert('interrupted');
+                            };
+
+                            xyz.jog = newJog;
                             xyz.homeAxis = newHomeAxis;
                             xyz.sendDone = newSendDone;
                             xyz.grblVersion = '';
