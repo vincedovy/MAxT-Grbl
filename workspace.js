@@ -1,4 +1,4 @@
-/* global cpdefine chilipeppr cprequire */
+/* global cpdefine chilipeppr cprequire $ cprequire_test */
 cprequire_test(["inline:com-chilipeppr-workspace-grbl"], function(ws) {
 
     console.log("initting workspace");
@@ -1183,13 +1183,67 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             console.log('WORKSPACE: loading axis widget');
             chilipeppr.load(
                 "com-chilipeppr-xyz",
-                "http://raw.githubusercontent.com/jpadie/widget-axes/master/auto-generated-widget.html",
+                "http: //fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
 
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-xyz"],
 
                         function(xyz) {
+                            //overwrite the G28 homing process with grbl's $H homing
+                            var oldHomeAxis = xyz.homeAxis.bind(xyz);
+                            var newHomeAxis = function(data) {
+                                var cmd = "$H\n";
+                                console.log(cmd);
+                                chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+
+                            };
+                            var oldSendDone = xyz.sendDone.bind(xyz);
+                            var newSendDone = function(data) {
+
+                            };
+                            xyz.homeAxis = newHomeAxis;
+                            xyz.sendDone = newSendDone;
+
+                            xyz.updateAxesFromStatus = function(axes) {
+                                console.log("updateAxesFromStatus:", axes);
+
+                                var coords = {
+                                        x: null,
+                                        y: null,
+                                        z: null
+                                    } //create local object to edit
+
+                                //first, we may need to convert units to match 3d viewer
+                                if (axes.unit == "mm" && xyz.currentUnits === "inch") {
+                                    coords.x = (axes.x / 25.4).toFixed(3);
+                                    coords.y = (axes.y / 25.4).toFixed(3);
+                                    coords.z = (axes.z / 25.4).toFixed(3);
+                                }
+                                else if (axes.unit == "inch" && xyz.currentUnits === "mm") {
+                                    coords.x = (axes.x * 25.4).toFixed(3);
+                                    coords.y = (axes.y * 25.4).toFixed(3);
+                                    coords.z = (axes.z * 25.4).toFixed(3);
+                                }
+                                else {
+                                    coords.x = axes.x;
+                                    coords.y = axes.y;
+                                    coords.z = axes.z;
+                                }
+
+                                if ('x' in coords && coords.x != null) {
+                                    xyz.updateAxis("x", coords.x);
+                                }
+                                if ('y' in coords && coords.y != null) {
+                                    xyz.updateAxis("y", coords.y);
+                                }
+                                if ('z' in coords && coords.z != null) {
+                                    xyz.updateAxis("z", coords.z);
+                                }
+                                if ('a' in coords && coords.a != null) {
+                                    xyz.updateAxis("a", coords.a);
+                                }
+                            };
 
                             xyz.init();
 
