@@ -1258,10 +1258,13 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                         cmd = '$J' + xyz + val + "\n";
                                     }
                                     // do last minute check to see if planner buffer is too full, if so ignore this cmd
-                                    if (!(that.isPausedByPlanner))
+                                    if (!(that.isPausedByPlanner)) {
                                         chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-                                    else
+                                        console.log('AXIS WIDGET: sent cmd ' + cmd);
+                                    }
+                                    else {
                                         console.log("planner buffer full, so not sending jog cmd");
+                                    }
                                 }
 
 
