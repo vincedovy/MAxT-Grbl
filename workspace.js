@@ -1215,8 +1215,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             xyz.grblVersion = '';
                             xyz.setGrblVersion = function(version) {
                                 console.log('AXIS WIDGET: new grbl version received', version);
-                                xyz.grblVersion = version;
-                                console.log('AXIS WIDGET: new grbl version received - double check', xyz.grblVersion);
+                                this.grblVersion = version;
+                                console.log('AXIS WIDGET: new grbl version received - double check', this.grblVersion);
                                 alert(version);
                             };
                             chilipeppr.subscribe("com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
