@@ -1204,19 +1204,20 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
-                                var key = direction;
                                 var cmd = "G91 G0 ";
                                 var feedrate = 200;
-                                var mult = 1;
-                                var _xyz = "";
-                                //var val = 0.001;
-                                var val = 1.00;
-                                //var baseval = 1.00;
-                                var baseval = xyz.accelBaseval;
+                                var val = parseFloat(xyz.accelBaseval);
+                                if (direction.length == 0) return true;
+                                if (xyz.isGrblV1()) {
+                                    cmd = '$J=' + direction + parseFloat(xyz.accelBaseval) + " F" + feedrate + "\n";
+                                }
+                                else {
+                                    cmd = "G91 G0 " + direction.replace('+', '') + parseFloat(xyz.accelBaseval) + "\nG90\n";
+                                }
 
                                 // adjust feedrate relative to acceleration
                                 //feedrate = feedrate * ((this.accelBaseval / this.baseval) / 2);
-
+                                /*                                
                                 if (key == "Y+") {
                                     // up arrow. Y+
                                     _xyz = "Y";
@@ -1248,26 +1249,20 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     val = -1 * baseval; //0.001;
                                 }
                                 val = val * mult;
-
+                               
                                 if (_xyz.length > 0) {
                                     //cmd += xyz + val + " F" + feedrate + "\nG90\n";
 
-
-                                    if (xyz.isGrblV1()) {
-                                        cmd = '$J=' + _xyz + val + "\n";
-                                    }
-                                    else {
-                                        cmd += _xyz + val + "\nG90\n";
-                                    }
-                                    // do last minute check to see if planner buffer is too full, if so ignore this cmd
-                                    if (!(xyz.isPausedByPlanner)) {
-                                        chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-                                        console.log('AXIS WIDGET: sent cmd ' + cmd);
-                                    }
-                                    else {
-                                        console.log("planner buffer full, so not sending jog cmd");
-                                    }
+*/
+                                // do last minute check to see if planner buffer is too full, if so ignore this cmd
+                                if (!(xyz.isPausedByPlanner)) {
+                                    chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                                    console.log('AXIS WIDGET: sent cmd ' + cmd);
                                 }
+                                else {
+                                    console.log("planner buffer full, so not sending jog cmd");
+                                }
+                                //    }
 
 
                             };
