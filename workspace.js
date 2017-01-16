@@ -1204,20 +1204,80 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
-                                alert('interrupted');
+                                var that = xyz;
+                                var key = direction;
+                                var cmd = "G91 G0 ";
+                                var feedrate = 200;
+                                var mult = 1;
+                                var xyz = "";
+                                //var val = 0.001;
+                                var val = 1.00;
+                                //var baseval = 1.00;
+                                var baseval = that.accelBaseval;
+
+                                // adjust feedrate relative to acceleration
+                                //feedrate = feedrate * ((this.accelBaseval / this.baseval) / 2);
+
+                                if (key == "Y+") {
+                                    // up arrow. Y+
+                                    xyz = "Y";
+                                    val = baseval; //0.001;
+                                }
+                                else if (key == "Y-") {
+                                    // down arrow. Y-
+                                    xyz = "Y";
+                                    val = -1 * baseval; //0.001;
+                                }
+                                else if (key == "X+") {
+                                    // right arrow. X+
+                                    xyz = "X";
+                                    val = baseval; //0.001;
+                                }
+                                else if (key == "X-") {
+                                    // left arrow. X-
+                                    xyz = "X";
+                                    val = -1 * baseval; //0.001;
+                                }
+                                else if (key == "Z+") {
+                                    // page up. Z+
+                                    xyz = "Z";
+                                    val = baseval; //0.001;
+                                }
+                                else if (key == "Z-") {
+                                    // page down. Z-
+                                    xyz = "Z";
+                                    val = -1 * baseval; //0.001;
+                                }
+                                val = val * mult;
+
+                                if (xyz.length > 0) {
+                                    //cmd += xyz + val + " F" + feedrate + "\nG90\n";
+                                    cmd += xyz + val + "\nG90\n";
+
+                                    if (that.isGrblV1()) {
+                                        cmd = '$J' + xyz + val + "\n";
+                                    }
+                                    // do last minute check to see if planner buffer is too full, if so ignore this cmd
+                                    if (!(that.isPausedByPlanner))
+                                        chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                                    else
+                                        console.log("planner buffer full, so not sending jog cmd");
+                                }
 
 
                             };
 
-                            //xyz.jog = newJog;
+                            xyz.jog = newJog;
                             xyz.homeAxis = newHomeAxis;
                             xyz.sendDone = newSendDone;
                             xyz.grblVersion = '';
                             xyz.setGrblVersion = function(version) {
-                                console.log('AXIS WIDGET: new grbl version received', version);
                                 this.grblVersion = version;
-                                console.log('AXIS WIDGET: new grbl version received - double check', this.grblVersion);
-                                alert(this.grblVersion);
+                            };
+                            xyz.isGrblV1 = function() {
+                                if (xyz.grblVersion.length == 0) return false;
+                                if (xyz.grblVersion.substring(0, 1) == '1') return true;
+                                return false;
                             };
                             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
                             xyz.updateAxesFromStatus = function(axes) {
