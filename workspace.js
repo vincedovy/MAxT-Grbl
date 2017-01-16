@@ -1209,7 +1209,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
 
-                            xyz.jog = newJog;
+                            //xyz.jog = newJog;
                             xyz.homeAxis = newHomeAxis;
                             xyz.sendDone = newSendDone;
                             xyz.grblVersion = '';
@@ -1217,10 +1217,9 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 console.log('AXIS WIDGET: new grbl version received', version);
                                 xyz.grblVersion = version;
                                 console.log('AXIS WIDGET: new grbl version received - double check', xyz.grblVersion);
-                            };
-                            chilipeppr.subscribe("com-chilipeppr-interface-cnccontroller/grblVersion", function(version) {
                                 alert(version);
-                            });
+                            };
+                            chilipeppr.subscribe("com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
                             xyz.updateAxesFromStatus = function(axes) {
                                 console.log("updateAxesFromStatus:", axes);
 
