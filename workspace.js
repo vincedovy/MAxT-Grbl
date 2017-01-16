@@ -1205,6 +1205,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
                                 alert('interrupted');
+
+
                             };
 
                             xyz.jog = newJog;
