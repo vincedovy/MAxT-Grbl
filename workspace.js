@@ -1254,7 +1254,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
 
                                     if (xyz.isGrblV1()) {
-                                        cmd = '$J' + _xyz + val + "\n";
+                                        cmd = '$J=' + _xyz + val + "\n";
                                     }
                                     else {
                                         cmd += _xyz + val + "\nG90\n";
@@ -1502,18 +1502,18 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             var newOnRecvLine = function(data) {
                                 //ignore incoming status update to keep console clear otherwise continue with original function
                                 console.log("GRBL: AltOnRecvLine: " + data.dataline);
-                                if (data.dataline.search(/^<|^\$G|^\?|^\[/) < 0 || $('#com-chilipeppr-widget-grbl .grbl-verbose').hasClass("enabled")) {
-                                    data.dataline = data.dataline.replace("<", "&lt;").replace(">", "&gt;");
-                                    oldOnRecvLine(data);
-                                }
+                                //   if (data.dataline.search(/^<|^\$G|^\?|^\[/) < 0 || $('#com-chilipeppr-widget-grbl .grbl-verbose').hasClass("enabled")) {
+                                data.dataline = data.dataline.replace("<", "&lt;").replace(">", "&gt;");
+                                oldOnRecvLine(data);
+                                // }
                             };
                             var oldJsonOnQueue = spc.jsonOnQueue.bind(spc);
                             var newJsonOnQueue = function(data) {
                                 console.log("GRBL: AltJsonOnQueue: " + data);
-                                if (data.D.search(/^<|^\$G|^\?|^\[/) < 0 || $('#com-chilipeppr-widget-grbl .grbl-verbose').hasClass("enabled")) {
-                                    data.D = data.D.replace("<", "&lt;").replace(">", "&gt;");
-                                    oldJsonOnQueue(data);
-                                }
+                                //     if (data.D.search(/^<|^\$G|^\?|^\[/) < 0 || $('#com-chilipeppr-widget-grbl .grbl-verbose').hasClass("enabled")) {
+                                data.D = data.D.replace("<", "&lt;").replace(">", "&gt;");
+                                oldJsonOnQueue(data);
+                                //    }
                             };
 
                             spc.onRecvLine = newOnRecvLine;
