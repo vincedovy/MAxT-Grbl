@@ -857,6 +857,42 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                         ['inline:com-chilipeppr-widget-3dviewer'],
 
                         function(threed) {
+
+                            chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/grblVersion", threed, threed.setGrblVersion);
+                            threed.setGrblVersion = function(version) {
+                                threed.grblVersion = version;
+                            }
+                            threed.grblVersion = '';
+
+                            threed.isGrblV1 = function() {
+                                if (threed.grblVersion.length == 0) return false;
+                                return threed.grblVersion.substring(0, 1) == '1';
+                            };
+                            var newJogMouseClick = function(evt) {
+                                var feedrate = 200;
+                                console.log("jogMouseClick. evt:", evt);
+                                if (evt.ctrlKey || evt.altKey) {
+                                    if (threed.jogCurPos != null) {
+                                        var pt = threed.jogCurPos;
+                                        if (threed.isGrblV1()) {
+                                            var gcode = '$J=X' + pt.x.toFixed(3) + " Y" + pt.y.toFixed(3) + " F" + feedrate;
+                                        }
+                                        else {
+                                            var gcode = "G90 G0 X" + pt.x.toFixed(3) + " Y" + pt.y.toFixed(3);
+                                        }
+                                        gcode += "\n";
+                                        chilipeppr.publish("/com-chilipeppr-widget-serialport/send", gcode);
+                                    }
+                                    else {
+                                        console.warn("this.jogCurPos should not be null");
+                                    }
+                                }
+
+                            };
+
+                            threed.jogMouseClick = newJogMouseClick;
+
+
                             //override gotoXyz function to take into account the units parameter passed back in axes pubsub from GRBL.
                             threed.gotoXyz = function(data) {
                                 // we are sent this command by the CNC controller generic interface
@@ -1204,15 +1240,15 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
-                                var cmd = "G91 G0 ";
                                 var feedrate = 200;
-                                var val = parseFloat(xyz.accelBaseval);
+                                var val = parseFloat(xyz.accelBaseval).toFixed(3);
                                 if (direction.length == 0) return true;
+                                var cmd;
                                 if (xyz.isGrblV1()) {
-                                    cmd = '$J=' + direction + parseFloat(xyz.accelBaseval) + " F" + feedrate + "\n";
+                                    cmd = '$J=' + direction + val + " F" + feedrate + "\n";
                                 }
                                 else {
-                                    cmd = "G91 G0 " + direction.replace('+', '') + parseFloat(xyz.accelBaseval) + "\nG90\n";
+                                    cmd = "G91 G0 " + direction.replace('+', '') + val + "\nG90\n";
                                 }
 
                                 // adjust feedrate relative to acceleration
@@ -1276,8 +1312,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             };
                             xyz.isGrblV1 = function() {
                                 if (xyz.grblVersion.length == 0) return false;
-                                if (xyz.grblVersion.substring(0, 1) == '1') return true;
-                                return false;
+                                return (xyz.grblVersion.substring(0, 1) == '1');
                             };
                             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
                             xyz.updateAxesFromStatus = function(axes) {
