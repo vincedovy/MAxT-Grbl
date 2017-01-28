@@ -1386,7 +1386,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 if (direction.length == 0) return true;
                                 var cmd;
                                 if (xyz.isGrblV1()) {
-                                    cmd = '$J=' + direction + val + " F" + feedrate + "\n";
+                                    cmd = '$J=G91' + direction + val + " F" + feedrate + "\n";
                                 }
                                 else {
                                     cmd = "G91 G0 " + direction.replace('+', '') + val + "\nG90\n";
