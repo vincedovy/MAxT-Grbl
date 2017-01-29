@@ -1542,6 +1542,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-grbl
 
             console.log('WORKSPACE: loading grbl widget');
+
             chilipeppr.load(
                 "#com-chilipeppr-widget-grbl-instance",
                 "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
