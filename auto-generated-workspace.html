@@ -441,15 +441,11 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     });
                 });
 
-            // Auto-Leveller
-            // com-chilipeppr-ws-autolevel
-            // hiding auto leveller as unsure what features supported in grbl. will come back to this.
-            // http:jsfiddle.net/jarret/uvVL6/
 
             console.log('WORKSPACE: loading autolevel');
             chilipeppr.load(
                 "#com-chilipeppr-ws-autolevel",
-                "http://raw.githubusercontent.com/jpadie/widget-grbl-autolevel/master/auto-generated-widget.html",
+                "http://raw.githubusercontent.com/chilipeppr-grbl/grbl-widget-autolevel/master/auto-generated-widget.html",
                 function() {
                     require(["inline:com-chilipeppr-widget-autolevel"], function(autolevel) {
                         autolevel.init();
@@ -471,6 +467,90 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             $(window).trigger('resize');
 
                         });
+
+                        var newDoNextStep = function() {
+                            console.log("doNextStep");
+
+                            if (autolevel.isPaused) {
+                                console.log("we are paused. returning.");
+                                autolevel.status("Paused");
+                                return;
+                            }
+
+                            if (autolevel.currentStep === null) {
+                                // we are just starting
+                                autolevel.status("Starting probes");
+                                autolevel.currentStep = 0;
+                                chilipeppr.publish("/com-chilipeppr-widget-grbl-autolevel/probing", true);
+
+                            }
+                            else {
+                                autolevel.currentStep++;
+                            }
+
+                            if (autolevel.currentStep >= autolevel.probes.length) {
+                                // we're done
+                                console.log("next step is greater than probes array length. done.");
+                                autolevel.status("Moving Z to safety height");
+                                var g = "(Moving to Z safety height)\n" +
+                                    "G91\n" +
+                                    "G0Z" + $('.autolevel-elem.al-coord.z-safetyheight').val() + "\n" +
+                                    "G90\n";
+                                autolevel.send(g);
+                                autolevel.status("Done running probe. Found all Zs for " + autolevel.probes.length + " locations");
+                                autolevel.stopAutoLevel();
+                                chilipeppr.publish("/com-chilipeppr-widget-grbl-autolevel/probing", false);
+
+                                // store file automatically
+                                var fileStr = JSON.stringify(autolevel.probes);
+                                var lastLoc = "x:" + autolevel.probes[autolevel.probes.length - 1].x + ",y:" + autolevel.probes[autolevel.probes.length - 1].y;
+                                var info = {
+                                    name: "Probed " + autolevel.probes.length + " locs. Last loc: " + lastLoc,
+                                    lastModified: new Date()
+                                };
+                                autolevel.createRecentFileEntry(fileStr, info);
+                                autolevel.status("Created a recent probe data entry for you called \"" + info.name + "\" available in pulldown menu for this widget.");
+
+                                // spit out debug
+                                console.log("Final JSON data.", JSON.stringify(autolevel.probes));
+                                return;
+                            }
+
+                            //These values should be pulling off input boxes, need to be updated to get the .val() of the specific input box.
+
+                            var probe = autolevel.probes[autolevel.currentStep];
+                            var pos = '{x:' + probe.x + ',y:' + probe.y + '}';
+                            autolevel.status("Moving to " + pos);
+                            autolevel.send("G0 Z" + $(".high-z").val() + "\n"); //raise probe
+                            autolevel.send("G0 X" + probe.x + " Y" + probe.y + "\n"); //move to next probe point
+                            autolevel.send("G0 Z" + $(".probe-z").val() + "\n"); //lower probe to starting point
+
+                            if (autolevel.currentStep == 0) {
+                                // could adjust the z value for the first probe to find the surface, but currently it is same as other steps.
+                                autolevel.send("G38.2 Z" + $(".maxneg-z").val() + " F" + $(".probe-fr").val() + "\n");
+                            }
+                            else {
+                                // on subsequent we have a known z near pcb board so no need to go too negative (just in case)
+                                autolevel.send("G38.2 Z" + $(".maxneg-z").val() + " F" + $(".probe-fr").val() + "\n");
+                            }
+
+                            probe.sent = true; //mark probe sent as true.
+
+                        };
+                        var newStopAutoLevel = function() {
+                            // connect to cnccontroller for probe responses
+                            chilipeppr.unsubscribe("/com-chilipeppr-interface-cnccontroller/proberesponse", this, this.probeResponse);
+                            chilipeppr.publish("/com-chilipeppr-widget-grbl-autolevel/probing", false);
+                            autolevel.isPaused = true;
+                            $('.com-chilipeppr-widget-autolevel-stop').popover('hide');
+                            $('.com-chilipeppr-widget-autolevel-pause').popover('hide');
+                            $('.com-chilipeppr-widget-autolevel-run').prop('disabled', false);
+                            $('.com-chilipeppr-widget-autolevel-pause').prop('disabled', true);
+                            autolevel.currentStep = null; //when stopping probing or completing probe run, reset currentStep to null to indicate to probeResponse function that we are not expecting any further communication from cnc interface.
+                        };
+
+                        autolevel.stopAutoLevel = newStopAutoLevel;
+                        autolevel.doNextStep = newDoNextStep;
                     });
                 });
             /*
