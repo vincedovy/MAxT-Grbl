@@ -32,6 +32,19 @@ cprequire_test(["inline:com-chilipeppr-workspace-grbl"], function(ws) {
 
 } /*end_test*/ );
 
+Function.prototype.clone = function() {
+    var that = this;
+    var temp = function temporary() {
+        return that.apply(this, arguments);
+    };
+    for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+            temp[key] = this[key];
+        }
+    }
+    return temp;
+};
+
 // This is the main definition of your widget. Give it a unique name.
 cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function() {
     return {
@@ -1333,6 +1346,19 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                         function(gcodelist) {
                             gcodelist.init();
+
+                            var oFL = gcodelist.onFileLoaded.clone();
+
+                            var newOnFileLoaded = function(txt, info, skipLocalStore) {
+                                oFL(txt, info, skipLocalStore);
+                                var result = gcodelist.fileLines.exec(/(G20|G21)/i);
+                                if (result != null) {
+                                    chilipeppr.publish('/com-chilipeppr-interface-cnccontroller/coordinateUnits', result[1]);
+                                    console.log("GCODE WIDGET: sending coordinate units", result[1]);
+                                }
+                            };
+                            gcodelist.onFileLoaded = newOnFileLoaded;
+
                         });
                 });
 
