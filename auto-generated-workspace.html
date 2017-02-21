@@ -1370,7 +1370,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             };
 
                                             //console.log("args:", args);
-                                            if (tokens.length > 1 && !isComment) {
+                                            if (tokens.length > 0 && !isComment) {
                                                 tokens.splice(1).forEach(function(token) {
                                                     //console.log("token:", token);
                                                     if (token && token.length > 0) {
