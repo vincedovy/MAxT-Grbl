@@ -1231,7 +1231,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             var handler = this.handlers[cmd] || this.handlers['default'];
 
                                             // don't save if saw a comment
-                                            if (!args.isComment && args['g'] != undefined) {
+                                            if (!args.isComment) {
                                                 this.lastArgs = args;
                                                 //console.log("just saved lastArgs for next use:", this.lastArgs);
                                             }
