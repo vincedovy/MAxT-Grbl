@@ -1231,7 +1231,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             var handler = this.handlers[cmd] || this.handlers['default'];
 
                                             // don't save if saw a comment
-                                            if (!args.isComment && !(args.cmd.substring(0, 2).toLowerCase == "m8" || args.cmd.substring(0, 2).toLowerCase() == 'm9')) {
+                                            if (!args.isComment && args.cmd && !(args.cmd.substring(0, 2).toLowerCase == "m8" || args.cmd.substring(0, 2).toLowerCase() == 'm9')) {
                                                 this.lastArgs = args;
                                                 console.info("just saved lastArgs for next use:", this.lastArgs);
                                             }
