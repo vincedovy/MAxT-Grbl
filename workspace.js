@@ -1198,7 +1198,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             //console.log("args:", args);
                                             if (tokens.length > 0 && !isComment) {
                                                 var n;
-                                                if (tokens[0].substring(0, 1).toLowerCase() == 'm') {
+                                                if (tokens[0] && tokens[0].substring(0, 1).toLowerCase() == 'm') {
                                                     n = 0;
                                                 }
                                                 else {
