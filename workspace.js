@@ -1150,7 +1150,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                         //text = text.replace(/\(.*$/, ""); // () trailing
 
                                         var tokens = text.split(/\s+/);
-                                        //console.log("tokens:", tokens);
+                                        console.info("3D Viewer", "tokens:", tokens);
                                         if (tokens) {
                                             var cmd = tokens[0];
                                             cmd = cmd.toUpperCase();
