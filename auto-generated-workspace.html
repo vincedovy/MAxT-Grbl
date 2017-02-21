@@ -1371,7 +1371,14 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                                             //console.log("args:", args);
                                             if (tokens.length > 0 && !isComment) {
-                                                tokens.splice(1).forEach(function(token) {
+                                                var n;
+                                                if (tokens[0].substring(0).toLowerCase() == 'm') {
+                                                    n = 0;
+                                                }
+                                                else {
+                                                    n = 1;
+                                                }
+                                                tokens.splice(n).forEach(function(token) {
                                                     //console.log("token:", token);
                                                     if (token && token.length > 0) {
                                                         var key = token[0].toLowerCase();
@@ -1388,6 +1395,9 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                                         //console.log("couldn't parse token in foreach. weird:", token);
                                                     }
                                                 });
+                                            }
+                                            else if (!isComment) {
+
                                             }
                                             var handler = this.handlers[cmd] || this.handlers['default'];
 
