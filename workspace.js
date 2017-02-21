@@ -1202,7 +1202,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                                     if (token && token.length > 0) {
                                                         var key = token[0].toLowerCase();
                                                         var value = parseFloat(token.substring(1));
-                                                        console.info("3D Viewer", "token", "value:", value, "key:", key);
+                                                        console.info("3D Viewer", "token", token, {
+                                                            value: value,
+                                                            key: key
+                                                        });
                                                         //if (isNaN(value))
                                                         //    console.error("got NaN. val:", value, "key:", key, "tokens:", tokens);
                                                         args[key] = value;
