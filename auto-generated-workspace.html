@@ -1370,15 +1370,15 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             };
 
                                             //console.log("args:", args);
-                                            if (tokens.length > 0 && !isComment) {
-                                                var n;
-                                                if (tokens[0] && tokens[0].substring(0, 1).toLowerCase() == 'm') {
-                                                    n = 0;
-                                                }
-                                                else {
-                                                    n = 1;
-                                                }
-                                                tokens.splice(n).forEach(function(token) {
+                                            if (tokens.length > 1 && !isComment) {
+                                                /* var n;
+                                                 if (tokens[0] && tokens[0].substring(0, 1).toLowerCase() == 'm') {
+                                                     n = 0;
+                                                 }
+                                                 else {
+                                                     n = 1;
+                                                 }*/
+                                                tokens.splice(1).forEach(function(token) {
                                                     //console.log("token:", token);
                                                     if (token && token.length > 0) {
                                                         var key = token[0].toLowerCase();
@@ -1405,7 +1405,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             var handler = this.handlers[cmd] || this.handlers['default'];
 
                                             // don't save if saw a comment
-                                            if (!args.isComment) {
+                                            if (!args.isComment && args['g'] != undefined) {
                                                 this.lastArgs = args;
                                                 //console.log("just saved lastArgs for next use:", this.lastArgs);
                                             }
