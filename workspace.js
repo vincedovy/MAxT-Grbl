@@ -1253,9 +1253,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                                     //if (args.feedrate 
                                                 }
 
-                                                //console.log("about to call handler. args:", args, "info:", info, "this:", this);
-
-                                                return handler(args, info, this);
+                                                console.info("3DViewer", "about to call handler. args:", args, "info:", info, "this:", this);
+                                                var holder = handler(args, info, this);
+                                                console.info('3DViewer', 'holder', holder);
+                                                return holder;
                                             }
                                             else {
                                                 console.error("No handler for gcode command!!!");
