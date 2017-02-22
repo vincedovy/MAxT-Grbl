@@ -1384,10 +1384,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                                         var key = token[0].toLowerCase();
                                                         if (token != null) {
                                                             var value = parseFloat(token.substring(1));
-                                                            console.info("3D Viewer", "token", token, {
-                                                                value: value,
-                                                                key: key
-                                                            });
+                                                            //console.info("3D Viewer", "token", token, {
+                                                            //     value: value,
+                                                            //    key: key
+                                                            //    });
 
                                                             //if (isNaN(value))
                                                             //    console.error("got NaN. val:", value, "key:", key, "tokens:", tokens);
@@ -1407,7 +1407,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             // don't save if saw a comment
                                             if (!args.isComment && args.cmd && args.cmd.substring(0, 1).toLowerCase() != "m") { //needs looking at
                                                 this.lastArgs = args;
-                                                console.info("just saved lastArgs for next use:", this.lastArgs);
+                                                //console.info("just saved lastArgs for next use:", this.lastArgs);
                                             }
                                             else {
                                                 //console.log("this was a comment, so didn't save lastArgs");
@@ -1443,9 +1443,9 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                                     //if (args.feedrate 
                                                 }
 
-                                                console.info("3DViewer", "about to call handler. args:", args, "info:", info, "this:", this, "handler", handler);
+                                                //console.info("3DViewer", "about to call handler. args:", args, "info:", info, "this:", this, "handler", handler);
                                                 var holder = handler(args, info, this);
-                                                console.info('3DViewer', 'holder', holder);
+                                                //console.info('3DViewer', 'holder', holder);
                                                 return holder;
                                             }
                                             else {
