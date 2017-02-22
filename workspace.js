@@ -1362,19 +1362,25 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                         ["inline:com-chilipeppr-widget-gcode"],
 
                         function(gcodelist) {
-                            gcodelist.init();
+
 
                             var oFL = gcodelist.onFileLoaded.clone();
 
                             var newOnFileLoaded = function(txt, info, skipLocalStore) {
                                 oFL(txt, info, skipLocalStore);
                                 var result = gcodelist.fileLines.exec(/(G20|G21)/i);
+
                                 if (result != null) {
+                                    console.info("GCODE LIST", "G20 or G21 found", result);
                                     chilipeppr.publish('/com-chilipeppr-interface-cnccontroller/coordinateUnits', result[1]);
                                     console.log("GCODE WIDGET: sending coordinate units", result[1]);
                                 }
+                                else {
+                                    console.info("GCODE LIST", "G20 or G21 not found");
+                                }
                             };
                             gcodelist.onFileLoaded = newOnFileLoaded;
+                            gcodelist.init();
 
                         });
                 });
