@@ -1363,7 +1363,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                         function(gcodelist) {
 
-
+                            gcodelist.init();
                             var oFL = gcodelist.onFileLoaded;
 
                             gcodelist.onFileLoaded = function(txt, info, skipLocalStore) {
