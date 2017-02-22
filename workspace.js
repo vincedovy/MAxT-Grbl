@@ -1381,7 +1381,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 }
                                 return ret;
                             };
-                            gcodelist.onFileLoaded = this.onFileLoaded;
+                            gcodelist.onFileLoaded = onFileLoaded;
                         });
                 });
 
