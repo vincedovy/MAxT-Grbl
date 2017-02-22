@@ -1366,7 +1366,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             gcodelist.init();
 
                             var newOnFileLoaded = function(txt, info, skipLocalStore) {
-                                console.log("Got onFileLoaded. txt.length:", txt.length, "info:", info, "skipLocalStore", skipLocalStore);
+                                console.error("Got onFileLoaded. txt.length:", txt.length, "info:", info, "skipLocalStore", skipLocalStore);
                                 gcodelist.fileInfo = info;
 
                                 //Check for G20 or G21 command. Exit onFileLoaded and prompt user to specify
