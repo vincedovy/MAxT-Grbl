@@ -1367,7 +1367,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             var oFL = gcodelist.onFileLoaded.clone();
 
                             var newOnFileLoaded = function(txt, info, skipLocalStore) {
-                                oFL(txt, info, skipLocalStore);
+                                var ret = oFL(txt, info, skipLocalStore);
                                 var result = gcodelist.fileLines.exec(/(G20|G21)/i);
 
                                 if (result != null) {
@@ -1378,6 +1378,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 else {
                                     console.info("GCODE LIST", "G20 or G21 not found");
                                 }
+                                return ret;
                             };
                             gcodelist.onFileLoaded = newOnFileLoaded;
                             gcodelist.init();
