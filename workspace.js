@@ -1366,7 +1366,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             gcodelist.init();
                             var oFL = gcodelist.onFileLoaded;
 
-                            gcodelist.onFileLoaded = function(txt, info, skipLocalStore) {
+                            var onFileLoaded = function(txt, info, skipLocalStore) {
                                 var ret = oFL.apply(gcodelist, arguments);
                                 var result = gcodelist.fileLines.exec(/(G20|G21)/i);
 
@@ -1380,7 +1380,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 }
                                 return ret;
                             };
-
+                            gcodelist.onFileLoaded = this.onFileLoaded;
                         });
                 });
 
