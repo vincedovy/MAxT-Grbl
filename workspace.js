@@ -1377,6 +1377,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     gcodelist.showUOMModal(txt, info, skipLocalStore);
                                 }
                                 else {
+                                    alert('updating coordinates ' + u[1]);
                                     chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/coordinateUnits", u[1]);
                                 }
 
