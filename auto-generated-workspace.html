@@ -574,6 +574,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     autolevel.isFadeOutUserObject = true;
                                 }
                             };
+                            autolevel.fadeOutUserObject = newFadeOutUserObject;
                             var newStopAutoLevel = function() {
                                 // connect to cnccontroller for probe responses
                                 chilipeppr.unsubscribe("/com-chilipeppr-interface-cnccontroller/proberesponse", this, this.probeResponse);
@@ -638,7 +639,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             autolevel.stopAutoLevel = newStopAutoLevel;
                             autolevel.doNextStep = newDoNextStep;
                             autolevel.probeResponse = newProbeResponse;
-                            autolevel.fadeOutUserObject = newFadeOutUserObject;
+
 
                         });
                 });
@@ -1528,248 +1529,19 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // http://jsfiddle.net/chilipeppr/a4g5ds5n/
             console.log('WORKSPACE: loading gcode list');
             chilipeppr.load("#com-chilipeppr-gcode-list",
-                "http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
+                "http://raw.githubusercontent.com/jpadie/widget-gcodelist-jpaFork/master/auto-generated-widget.html",
+                //"http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
                 //"http://jsfiddle.net/jarret/0a53jy0x/show/light",
 
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-gcode"],
-
                         function(gcodelist) {
-
-                            gcodelist.init();
-
-                            var newOnFileLoaded = function(txt, info, skipLocalStore) {
-                                console.error("Got onFileLoaded. txt.length:", txt.length, "info:", info, "skipLocalStore", skipLocalStore);
-                                gcodelist.fileInfo = info;
-
-                                //Check for G20 or G21 command. Exit onFileLoaded and prompt user to specify
-                                var u = txt.match(/(G20|G21)/i);
-                                if (gcodelist.isDirtyUnits === false && u === null) {
-                                    //no units command found.  prompt user to select units.
-                                    //this could also exit the onFileLoaded function, but failsafe would be to let this method continue in background and reissue once units selected by user.
-                                    gcodelist.showUOMModal(txt, info, skipLocalStore);
-                                }
-                                else {
-                                    alert('updating coordinates ' + u[1]);
-                                    chilipeppr.publish("/com-chilipeppr-interface-cnccontroller/coordinateUnits", u[1]);
-                                }
-
-                                // create flag to know if we did anything in this method
-                                // where we actually added/removed any lines of gcode cuz
-                                // then at end of method we need to re-send the gcode back
-                                // to the workspace as if it were drag/dropped by the user
-                                // as if the modified gcode we created was in the original
-                                // file.
-                                var isDirty = false;
-
-                                //if G20 or G21 was added manually, mark as dirty to re-issue to workspace.
-                                if (gcodelist.isDirtyUnits === true) {
-                                    isDirty = true;
-                                    gcodelist.isDirtyUnits = false;
-                                }
-
-                                var that = this;
-                                //console.log(arguments);
-                                //console.log(txt);
-                                // parse the text file and generate rows
-                                $('#com-chilipeppr-widget-gcode-tbl > tbody').html("");
-
-                                gcodelist.fileLines = txt.split(/\r{0,1}\n/);
-                                //gcodelist.fileLines = txt.split(/\n/);
-
-                                // see if last line is empty and if so, drop it
-                                if (gcodelist.fileLines[gcodelist.fileLines.length - 1].length == 0) {
-                                    gcodelist.fileLines.pop();
-                                }
-
-                                // do some pre-processing
-                                // make all %!~ characters on their own line become a comment
-                                // swap in %!~ inside comments to words as well
-                                var didWeRemoveAnyEmptyLines = false;
-                                var newFileLines = [];
-                                for (var idx = 0; idx < gcodelist.fileLines.length; idx++) {
-                                    var fileLine = gcodelist.fileLines[idx];
-                                    if (fileLine.match(/^\s*[%!~]/)) {
-                                        console.log("found line that had %!~ in it. line:", fileLine);
-                                        fileLine = fileLine.replace(/%/, ";percent not allowed");
-                                        fileLine = fileLine.replace(/!/, ";exclamation not allowed");
-                                        fileLine = fileLine.replace(/~/, ";tilde not allowed");
-                                        gcodelist.fileLines[idx] = fileLine;
-                                    }
-                                    // also check for !~% inside comments and swap
-                                    if (fileLine.match(/\(.*[!~%]/)) {
-                                        fileLine = fileLine.replace(/!/, "exclamation");
-                                        fileLine = fileLine.replace(/~/, "tilde");
-                                        fileLine = fileLine.replace(/%/, "percent");
-                                        gcodelist.fileLines[idx] = fileLine;
-                                    }
-
-                                    // trim
-                                    fileLine = fileLine.trim();
-
-                                    // remove line numbers
-                                    if (gcodelist.options.addlinenums) {
-                                        if (fileLine.match(/N\d/i)) {
-                                            // candidate, but could be a comment
-                                            //console.warn("got line num removal candidate. line:", fileLine);
-                                            // see if we have whole line comment
-                                            if (fileLine.match(/^;|^\(.*\)$/)) {
-                                                //console.warn("we have whole line comment, ignore");
-                                            }
-                                            else {
-                                                // we have real gcode
-                                                //console.warn("we have real gcode:", fileLine);
-                                                var myFileLine = fileLine.replace(/N\s*\d+/ig, "");
-                                                // comments removed
-                                                // now we can see what the number is
-                                                fileLine = myFileLine;
-                                            }
-                                            //console.warn("line at end:", fileLine);
-                                        }
-                                    }
-
-                                    // remove empty lines (problem is we won't line up with
-                                    // 3d viewer lines anymore)
-                                    if (gcodelist.options.removeemptylines) {
-                                        if (fileLine.match(/^\s*$/)) {
-                                            //console.warn("got empty line:", fileLine);
-                                            didWeRemoveAnyEmptyLines = true;
-                                        }
-                                        else {
-                                            newFileLines.push(fileLine);
-                                        }
-                                    }
-                                    else {
-                                        newFileLines.push(fileLine);
-                                    }
-
-                                }
-                                gcodelist.fileLines = newFileLines;
-
-                                // create array to store meta data for each line
-                                // this will hold onSent, onQueue, onWritten, onCompleted,
-                                // onExecuted statuses. It also holds whether this is a comment
-                                // so we know whether onExecute will ever get called for this line.
-                                // It could hold other meta data in the future too like feedrate
-                                // overrides, etc.
-                                gcodelist.metaLines = [];
-
-                                // if adding line nums, do it here temporarily
-                                if (gcodelist.options.addlinenums) {
-                                    for (var idx = 0; idx < gcodelist.fileLines.length; idx++) {
-                                        /*if (gcodelist.fileLines[idx].match(/^;|^\(.*\)$/)) {
-                                            // don't add line num
-                                            //console.warn("we have whole line comment, ignore");
-                                            gcodelist.metaLines[idx] = { isComment: true }
-                                        } else {*/
-                                        gcodelist.fileLines[idx] = "N" + (idx + 1) + " " + gcodelist.fileLines[idx];
-                                        //}
-                                    }
-                                }
-                                /*else {
-                                               // still parse for comments cuz need those for knowing
-                                               // whether onExecute will come back or not
-                                               
-                                           }*/
-
-                                // see if we removed/added lines and mark as isDirty
-                                // so we know at end of this open method to re-send the Gcode
-                                // file back into the workspace
-                                if (didWeRemoveAnyEmptyLines) {
-                                    isDirty = true;
-                                }
-
-                                //gcodelist.metaLines = [gcodelist.fileLines.length];
-
-
-                                // test code where we set some different statuses
-                                /*
-                                gcodelist.metaLines[0] = { isQueued: true, isWritten: true, isCompleted: true };
-                                gcodelist.metaLines[1] = { isQueued: true, isWritten: true };
-                                gcodelist.metaLines[2] = { isQueued: true };
-                                */
-
-                                // update dom to show lines
-                                $('#com-chilipeppr-widget-gcode-footer #gcode-lines').text(gcodelist.fileLines.length);
-                                $('#com-chilipeppr-widget-gcode-footer #gcode-lines-sent').text("0");
-                                $('#com-chilipeppr-widget-gcode-footer #gcode-lines-remaining').text(gcodelist.fileLines.length);
-
-                                gcodelist.appendRows(1);
-
-                                //gcodelist.setupInfiniteScroll();
-                                gcodelist.setupJumpScroll();
-
-                                // now format the gcode
-                                console.log("going to parse gcode to hilite it.");
-                                gcodelist.parseGcode();
-                                if (skipLocalStore != undefined && skipLocalStore == true) {
-                                    console.log("skipping storing local file to retain url path load");
-                                }
-                                else {
-                                    // we can get a QuotaExceededError here, so catch it
-                                    try {
-                                        // remove old 1st to perhaps make more room for quota check
-                                        localStorage.removeItem('last-imported');
-                                        // now set
-                                        localStorage.setItem('last-imported', txt);
-                                        console.log("stored gcode view file in local store as text");
-
-                                    }
-                                    catch (e) {
-                                        if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name == "QuotaExceededError" || e.code == 22 || e.name == "NS_ERROR_DOM_QUOTA_REACHED" || e.code == 1014) {
-                                            //gcodelist.sceneRemove(gcodelist.object);
-                                            // show err dialog
-                                            // $('#com-chilipeppr-widget-gcode-outofspace').modal();
-                                            console.error("Gcode Widget. out of local storage space, but letting user proceed. err:", e);
-
-                                        }
-                                        else {
-                                            console.error("Gcode Widget. got generic uncaught err with localStorage:", e);
-                                        }
-                                    }
-                                    //localStorage.setItem('last-imported', txt);
-                                    localStorage.removeItem('last-loaded');
-                                }
-
-                                // if we did anything that changed how many gcode lines there
-                                // are we need to re-send to the workspace to reset all
-                                // other widgets that subscribe to onDropped
-                                if (isDirty) {
-                                    // Let's do this in setTimeout to put it later in the stack
-                                    // so that other widgets can process the initial /onDropped
-                                    // and then we'll get put way later in stack to run afterwards
-                                    setTimeout(gcodelist.resendGcodeToWorkspace.bind(this), 200);
-
-                                    // get estimated time duration. request this after a few
-                                    // seconds to give best chance of 3d viewer being loaded
-                                    setTimeout(gcodelist.getEstimates.bind(this), 1000);
-
-                                    // now call our post opening call
-                                    console.log("tool change will get called in 3.5secs");
-                                    setTimeout(gcodelist.onAfterGcodeFileLoaded.bind(this), 1500);
-
-                                    // we return false to tell pubsub that no further
-                                    // listeners should parse this onDropped because we just
-                                    // reissued it
-                                    return false;
-                                }
-                                else {
-
-                                    // get estimated time duration. request this after a few
-                                    // seconds to give best chance of 3d viewer being loaded
-                                    setTimeout(gcodelist.getEstimates.bind(this), 1000);
-
-                                    // now call our post opening call
-                                    console.log("tool change will get called in 3.5secs");
-                                    setTimeout(gcodelist.onAfterGcodeFileLoaded.bind(this), 1500);
-                                }
-                            };
-
-                            gcodelist.onFileLoaded = newOnFileLoaded;
-                        });
-                });
-
+                            gcodelist.init()
+                        }
+                    );
+                }
+            );
 
             //Axes Widget XYZA
             //This widget is locked at version 97 until upgrades can be tested with the override code.
