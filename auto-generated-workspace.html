@@ -1570,7 +1570,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
-                                var feedrate = this.jogFeedRate;
+                                var feedrate = xyz.jogFeedRate;
                                 var val = parseFloat(xyz.accelBaseval).toFixed(3);
                                 if (direction.length == 0) return true;
                                 var cmd;
@@ -1583,46 +1583,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 }
 
                                 console.warn(cmd);
-                                // adjust feedrate relative to acceleration
-                                //feedrate = feedrate * ((this.accelBaseval / this.baseval) / 2);
-                                /*                                
-                                if (key == "Y+") {
-                                    // up arrow. Y+
-                                    _xyz = "Y";
-                                    val = baseval; //0.001;
-                                }
-                                else if (key == "Y-") {
-                                    // down arrow. Y-
-                                    _xyz = "Y";
-                                    val = -1 * baseval; //0.001;
-                                }
-                                else if (key == "X+") {
-                                    // right arrow. X+
-                                    _xyz = "X";
-                                    val = baseval; //0.001;
-                                }
-                                else if (key == "X-") {
-                                    // left arrow. X-
-                                    _xyz = "X";
-                                    val = -1 * baseval; //0.001;
-                                }
-                                else if (key == "Z+") {
-                                    // page up. Z+
-                                    _xyz = "Z";
-                                    val = baseval; //0.001;
-                                }
-                                else if (key == "Z-") {
-                                    // page down. Z-
-                                    _xyz = "Z";
-                                    val = -1 * baseval; //0.001;
-                                }
-                                val = val * mult;
-                               
-                                if (_xyz.length > 0) {
-                                    //cmd += xyz + val + " F" + feedrate + "\nG90\n";
 
-*/
-                                // do last minute check to see if planner buffer is too full, if so ignore this cmd
                                 if (!(xyz.isPausedByPlanner)) {
                                     chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                     console.log('AXIS WIDGET: sent cmd ' + cmd);
