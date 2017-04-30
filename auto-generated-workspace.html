@@ -1611,7 +1611,6 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
 
                             xyz.setJogFeedRate = function(jogFeedRate) {
-                                alert("feedrate set to " + jogFeedRate);
                                 this.jogFeedRate = jogFeedRate;
                             };
                             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/jogFeedRate", xyz, xyz.setJogFeedRate);
