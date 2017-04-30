@@ -1587,7 +1587,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 if (!(xyz.isPausedByPlanner)) {
                                     chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                     console.log('AXIS WIDGET: sent cmd ' + cmd);
-                                    chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
+                                    //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                 }
                                 else {
                                     console.log("planner buffer full, so not sending jog cmd");
