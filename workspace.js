@@ -1409,7 +1409,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     cmd = "G91 G0 " + direction.replace('+', '') + val + "\nG90\n";
                                 }
 
-                                console.warning(cmd);
+                                console.warn(cmd);
                                 // adjust feedrate relative to acceleration
                                 //feedrate = feedrate * ((this.accelBaseval / this.baseval) / 2);
                                 /*                                
