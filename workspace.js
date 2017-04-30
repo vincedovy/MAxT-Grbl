@@ -1359,11 +1359,13 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 //"http://fiddle.jshell.net/chilipeppr/a4g5ds5n/show/light/",
                 //"http://jsfiddle.net/jarret/0a53jy0x/show/light",
 
+
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-gcode"],
                         function(gcodelist) {
-                            gcodelist.init()
+                            gcodelist.init();
+                            var o = gcodelist.onFileLoad();
                         }
                     );
                 }
@@ -1395,10 +1397,11 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             };
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
-                                var feedrate = 200;
+                                var feedrate = this.jogFeedRate;
                                 var val = parseFloat(xyz.accelBaseval).toFixed(3);
                                 if (direction.length == 0) return true;
                                 var cmd;
+                                //chilipeppr.publish('/com-chilipeppr-widget-grbl-jogInterface/jog', direction);
                                 if (xyz.isGrblV1()) {
                                     cmd = '$J=G91' + direction + val + " F" + feedrate + "\n";
                                 }
@@ -1406,6 +1409,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     cmd = "G91 G0 " + direction.replace('+', '') + val + "\nG90\n";
                                 }
 
+                                console.warning(cmd);
                                 // adjust feedrate relative to acceleration
                                 //feedrate = feedrate * ((this.accelBaseval / this.baseval) / 2);
                                 /*                                
@@ -1449,6 +1453,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 if (!(xyz.isPausedByPlanner)) {
                                     chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                     console.log('AXIS WIDGET: sent cmd ' + cmd);
+                                    chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                 }
                                 else {
                                     console.log("planner buffer full, so not sending jog cmd");
@@ -1470,6 +1475,12 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 return (xyz.grblVersion.substring(0, 1) == '1');
                             };
                             chilipeppr.subscribe("/com-chilipeppr-interface-cnccontroller/grblVersion", xyz, xyz.setGrblVersion);
+                            chilipeppr.subscribe("/com-chilipeppr-widget-grbl/jogFeedRate", xyz, xyz.setJogFeedRate);
+                            xyz.setJogFeedRate = function(jogFeedRate) {
+                                alert("feedrate set to " + jogFeedRate);
+                                this.jogFeedRate = jogFeedRate;
+                            };
+                            xyz.jogFeedRate = 200;
                             xyz.updateAxesFromStatus = function(axes) {
                                 console.log("updateAxesFromStatus:", axes);
 
