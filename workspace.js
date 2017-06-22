@@ -418,17 +418,20 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     autolevel.isFadeOutUserObject = true;
                                 }
                             };
-                            var newStopAutoLevel = function() {
-                                // connect to cnccontroller for probe responses
-                                chilipeppr.unsubscribe("/com-chilipeppr-interface-cnccontroller/proberesponse", this, this.probeResponse);
-                                chilipeppr.publish("/com-chilipeppr-widget-grbl-autolevel/probing", false);
-                                autolevel.isPaused = true;
-                                $('.com-chilipeppr-widget-autolevel-stop').popover('hide');
-                                $('.com-chilipeppr-widget-autolevel-pause').popover('hide');
-                                $('.com-chilipeppr-widget-autolevel-run').prop('disabled', false);
-                                $('.com-chilipeppr-widget-autolevel-pause').prop('disabled', true);
-                                autolevel.currentStep = null; //when stopping probing or completing probe run, reset currentStep to null to indicate to probeResponse function that we are not expecting any further communication from cnc interface.
-                            };
+
+                            /* var newStopAutoLevel = function() {
+                                 // connect to cnccontroller for probe responses
+                                 chilipeppr.unsubscribe("/com-chilipeppr-interface-cnccontroller/proberesponse", this, this.probeResponse);
+                                 chilipeppr.publish("/com-chilipeppr-widget-grbl-autolevel/probing", false);
+                                 autolevel.isPaused = true;
+                                 $('.com-chilipeppr-widget-autolevel-stop').popover('hide');
+                                 $('.com-chilipeppr-widget-autolevel-pause').popover('hide');
+                                 $('.com-chilipeppr-widget-autolevel-run').prop('disabled', false);
+                                 $('.com-chilipeppr-widget-autolevel-pause').prop('disabled', true);
+                                 autolevel.currentStep = null; //when stopping probing or completing probe run, reset currentStep to null to indicate to probeResponse function that we are not expecting any further communication from cnc interface.
+                             };
+                             */
+                            /*
                             var newProbeResponse = function(result) {
 
                                 //expecting either coordinate object {"x":x,"y":y,"z":z} (float values) or string "alarm" if probe failed.
@@ -479,9 +482,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     return false; //ignore probe response because the probe command came from some other widget.   
                                 }
                             };
-                            autolevel.stopAutoLevel = newStopAutoLevel;
+                            */
+                            //autolevel.stopAutoLevel = newStopAutoLevel;
                             autolevel.doNextStep = newDoNextStep;
-                            autolevel.probeResponse = newProbeResponse;
+                            //autolevel.probeResponse = newProbeResponse;
                             autolevel.autoFillData = newAutoFillData;
                             autolevel.fadeOutUserObject = newFadeOutUserObject;
                         });
