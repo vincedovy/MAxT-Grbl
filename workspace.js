@@ -309,6 +309,24 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                             });
 
+                            var newAutoFillData = function() {
+                                // read the 3d viewer data and auto-fill the extents
+                                var b = autolevel.getBbox();
+
+                                var stepsevery = $('#com-chilipeppr-widget-autolevel-body .grid-steps').val();
+                                stepsevery = parseFloat(stepsevery);
+                                var endx = (stepsevery * (parseInt((b.box.max.x - b.box.min.x) / stepsevery, 10) + 1)) + b.box.min.x;
+                                var endy = (stepsevery * (parseInt((b.box.max.y - b.box.min.y) / stepsevery, 10) + 1)) + b.box.min.y;
+
+                                //bbox.box.min.x
+                                $('#com-chilipeppr-widget-autolevel-body .start-x').val(b.box.min.x);
+                                $('#com-chilipeppr-widget-autolevel-body .start-y').val(b.box.min.y);
+                                $('#com-chilipeppr-widget-autolevel-body .end-x').val(endx);
+                                $('#com-chilipeppr-widget-autolevel-body .end-y').val(endy);
+                                autolevel.formUpdate();
+                            };
+
+
                             var newDoNextStep = function() {
                                 console.warn("doNextStep");
 
@@ -400,7 +418,6 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     autolevel.isFadeOutUserObject = true;
                                 }
                             };
-                            autolevel.fadeOutUserObject = newFadeOutUserObject;
                             var newStopAutoLevel = function() {
                                 // connect to cnccontroller for probe responses
                                 chilipeppr.unsubscribe("/com-chilipeppr-interface-cnccontroller/proberesponse", this, this.probeResponse);
@@ -465,8 +482,8 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             autolevel.stopAutoLevel = newStopAutoLevel;
                             autolevel.doNextStep = newDoNextStep;
                             autolevel.probeResponse = newProbeResponse;
-
-
+                            autolevel.autoFillData = newAutoFillData;
+                            autolevel.fadeOutUserObject = newFadeOutUserObject;
                         });
                 });
             /*
@@ -1031,7 +1048,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
 
                             //override gotoXyz function to take into account the units parameter passed back in axes pubsub from GRBL.
-                            threed.gotoXyz = function(data) {
+                            threed.gotoXyz1 = function(data) {
                                 // we are sent this command by the CNC controller generic interface
                                 console.log("gotoXyz. data:", data);
                                 console.log("gotoXyz. curUnits:", threed.isUnitsMm);
@@ -1093,222 +1110,6 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 }
 
                                 threed.animAllowSleep();
-                            };
-                            //Pulled the entire GCodeParser logic in here to correct the problem with multiple GCODE commands on a single line
-                            //Waiting for John to implement a "better" solution in the master 3dViewer fork.
-                            threed.GCodeParser = function(handlers) {
-                                this.handlers = handlers || {};
-
-                                this.lastArgs = {
-                                    cmd: null
-                                };
-                                this.lastFeedrate = null;
-                                this.isUnitsMm = true;
-
-                                this.parseLine = function(text, info) {
-                                    //text = text.replace(/;.*$/, '').trim(); // Remove comments
-                                    //text = text.replace(/\(.*$/, '').trim(); // Remove comments
-                                    //text = text.replace(/<!--.*?-->/, '').trim(); // Remove comments
-
-                                    var origtext = text;
-                                    // remove line numbers if exist
-                                    if (text.match(/^N/i)) {
-                                        // yes, there's a line num
-                                        text = text.replace(/^N\d+\s*/ig, "");
-                                    }
-
-                                    // collapse leading zero g cmds to no leading zero
-                                    text = text.replace(/G00/i, 'G0');
-                                    text = text.replace(/G0(\d)/i, 'G$1');
-                                    // add spaces before g cmds and xyzabcijkf params
-                                    text = text.replace(/([gmtxyzabcijkfst])/ig, " $1");
-                                    // remove spaces after xyzabcijkf params because a number should be directly after them
-                                    text = text.replace(/([xyzabcijkfst])\s+/ig, "$1");
-                                    // remove front and trailing space
-                                    text = text.trim();
-
-                                    // see if comment
-                                    var isComment = false;
-                                    if (text.match(/^(;|\(|<)/)) {
-                                        text = origtext;
-                                        isComment = true;
-                                    }
-                                    else {
-                                        // make sure to remove inline comments
-                                        text = text.replace(/\(.*?\)/g, "");
-                                    }
-                                    //console.log("gcode txt:", text);
-
-                                    if (text && !isComment) {
-                                        //console.log("there is txt and it's not a comment");
-                                        //console.log("");
-                                        // preprocess XYZIJ params to make sure there's a space
-                                        //text = text.replace(/(X|Y|Z|I|J|K)/ig, "$1 ");
-                                        //console.log("gcode txt:", text);
-
-                                        // strip off end of line comment
-                                        text = text.replace(/(;|\().*$/, ""); // ; or () trailing
-                                        //text = text.replace(/\(.*$/, ""); // () trailing
-
-                                        var tokens = text.split(/\s+/);
-                                        //console.info("3D Viewer", "tokens:", tokens);
-                                        if (tokens) {
-                                            var cmd = tokens[0];
-                                            cmd = cmd.toUpperCase();
-                                            // check if a g or m cmd was included in gcode line
-                                            // you are allowed to just specify coords on a line
-                                            // and it should be assumed that the last specified gcode
-                                            // cmd is what's assumed
-                                            isComment = false;
-                                            if (!cmd.match(/^(G|M|T)/i)) {
-                                                // if comment, drop it
-                                                /*
-                                                if (cmd.match(/(;|\(|<)/)) {
-                                                    // is comment. do nothing.
-                                                    isComment = true;
-                                                    text = origtext;
-                                                    //console.log("got comment:", cmd);
-                                                } else {
-                                                */
-
-                                                //console.log("no cmd so using last one. lastArgs:", this.lastArgs);
-                                                // we need to use the last gcode cmd
-                                                cmd = this.lastArgs.cmd;
-                                                //console.log("using last cmd:", cmd);
-                                                tokens.unshift(cmd); // put at spot 0 in array
-                                                //console.log("tokens:", tokens);
-                                                //}
-                                            }
-                                            else {
-
-                                                // we have a normal cmd as opposed to just an xyz pos where
-                                                // it assumes you should use the last cmd
-                                                // however, need to remove inline comments (TODO. it seems parser works fine for now)
-
-                                            }
-                                            var args = {
-                                                'cmd': cmd,
-                                                'text': text,
-                                                'origtext': origtext,
-                                                'indx': info,
-                                                'isComment': isComment,
-                                                'feedrate': null,
-                                                'plane': undefined
-                                            };
-
-                                            //console.log("args:", args);
-                                            if (tokens.length > 1 && !isComment) {
-                                                /* var n;
-                                                 if (tokens[0] && tokens[0].substring(0, 1).toLowerCase() == 'm') {
-                                                     n = 0;
-                                                 }
-                                                 else {
-                                                     n = 1;
-                                                 }*/
-                                                tokens.splice(1).forEach(function(token) {
-                                                    //console.log("token:", token);
-                                                    if (token && token.length > 0) {
-                                                        var key = token[0].toLowerCase();
-                                                        if (token != null) {
-                                                            var value = parseFloat(token.substring(1));
-                                                            //console.info("3D Viewer", "token", token, {
-                                                            //     value: value,
-                                                            //    key: key
-                                                            //    });
-
-                                                            //if (isNaN(value))
-                                                            //    console.error("got NaN. val:", value, "key:", key, "tokens:", tokens);
-                                                            args[key] = value;
-                                                        }
-                                                    }
-                                                    else {
-                                                        //console.log("couldn't parse token in foreach. weird:", token);
-                                                    }
-                                                });
-                                            }
-                                            else if (!isComment) {
-
-                                            }
-                                            var handler = this.handlers[cmd] || this.handlers['default'];
-
-                                            // don't save if saw a comment
-                                            if (!args.isComment && args.cmd && args.cmd.substring(0, 1).toLowerCase() != "m") { //needs looking at
-                                                this.lastArgs = args;
-                                                //console.info("just saved lastArgs for next use:", this.lastArgs);
-                                            }
-                                            else {
-                                                //console.log("this was a comment, so didn't save lastArgs");
-                                            }
-                                            //console.log("calling handler: cmd:", cmd, "args:", args, "info:", info);
-                                            if (handler) {
-
-                                                // do extra check here for units. units are
-                                                // specified via G20 or G21. We need to scan
-                                                // each line to see if it's inside the line because
-                                                // we were only catching it when it was the first cmd
-                                                // of the line.
-                                                if (args.text.match(/\bG20\b/i)) {
-                                                    console.log("SETTING UNITS TO INCHES from pre-parser!!!");
-                                                    this.isUnitsMm = false; // false means inches cuz default is mm
-                                                }
-                                                else if (args.text.match(/\bG21\b/i)) {
-                                                    console.log("SETTING UNITS TO MM!!! from pre-parser");
-                                                    this.isUnitsMm = true; // true means mm
-                                                }
-
-                                                // scan for feedrate
-                                                if (args.text.match(/F([\d.]+)/i)) {
-                                                    // we have a new feedrate
-                                                    var feedrate = parseFloat(RegExp.$1);
-                                                    console.log("got feedrate on this line. feedrate:", feedrate, "args:", args);
-                                                    args.feedrate = feedrate;
-                                                    this.lastFeedrate = feedrate;
-                                                }
-                                                else {
-                                                    // use feedrate from prior lines
-                                                    args.feedrate = this.lastFeedrate;
-                                                    //if (args.feedrate 
-                                                }
-
-                                                //console.info("3DViewer", "about to call handler. args:", args, "info:", info, "this:", this, "handler", handler);
-                                                var holder = handler(args, info, this);
-                                                //console.info('3DViewer', 'holder', holder);
-                                                return holder;
-                                            }
-                                            else {
-                                                console.error("No handler for gcode command!!!");
-                                            }
-
-                                        }
-                                    }
-                                    else {
-                                        // it was a comment or the line was empty
-                                        // we still need to create a segment with xyz in p2
-                                        // so that when we're being asked to /gotoline we have a position
-                                        // for each gcode line, even comments. we just use the last real position
-                                        // to give each gcode line (even a blank line) a spot to go to
-                                        var args = {
-                                            'cmd': 'empty or comment',
-                                            'text': text,
-                                            'origtext': origtext,
-                                            'indx': info,
-                                            'isComment': isComment
-                                        };
-                                        var handler = this.handlers['default'];
-                                        return handler(args, info, this);
-                                    }
-                                }
-
-                                this.parse = function(gcode) {
-                                    //remove N### values, find any 'G' gcode commands and add a \n in front, then clean up any double \n\n's that resulted
-                                    gcode = gcode.replace(/(^|\n)N\d+\s*/ig, "\n").replace(/G/ig, "\nG").replace(/\n\n/ig, "\n");
-                                    var lines = gcode.split(/\r{0,1}\n/);
-                                    for (var i = 0; i < lines.length; i++) {
-                                        if (this.parseLine(lines[i], i) === false) {
-                                            break;
-                                        }
-                                    }
-                                }
                             };
 
                             console.log("Running 3dviewer");
@@ -1398,9 +1199,13 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             var newJog = function(direction, isFast, is100xFast, is1000xFast, is10000xFast) {
                                 var feedrate = xyz.jogFeedRate;
                                 var val = parseFloat(xyz.accelBaseval).toFixed(3);
+
                                 if (direction.length == 0) return true;
                                 var cmd;
                                 //chilipeppr.publish('/com-chilipeppr-widget-grbl-jogInterface/jog', direction);
+
+
+
                                 if (xyz.isGrblV1()) {
                                     cmd = '$J=G91' + direction + val + " F" + feedrate + "\n";
                                 }
