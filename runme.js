@@ -19,7 +19,7 @@ var mimeTypes = {
   "html": "text/html",
   "jpeg": "image/jpeg",
   "jpg": "image/jpeg",
-  "png": "image/png", 
+  "png": "image/png",
   "js": "text/javascript",
   "css": "text/css"
 };
@@ -28,7 +28,7 @@ http.createServer(function(req, res) {
 
   var uri = url.parse(req.url).pathname;
   console.log("URL being requested:", uri);
-  
+
   if (uri == "/") {
 
     res.writeHead(200, {
@@ -37,7 +37,7 @@ http.createServer(function(req, res) {
 
     //var html = getMainPage();
     var htmlDocs = generateWidgetDocs();
-    
+
     var notes = "";
     notes += "<p>Click refresh to regenerate README.md, " + fileAutoGeneratePath + ", and push updates to Github.</p>";
     generateWidgetReadme();
@@ -51,67 +51,68 @@ http.createServer(function(req, res) {
 
     //html = html + htmlDocs;
     var finalHtml = htmlDocs.replace(/<!-- pre-notes -->/, notes);
-    
+
     res.end(finalHtml);
 
-  } 
+  }
   else if (uri == "/pushtogithub") {
-    
+
     console.log("/pushtogithub called");
-    
+
     var stdout = pushToGithubSync()
-    
+
     var json = {
       success: true,
       desc: "Pushed to Github",
       log: stdout
     }
-    
+
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
     res.end(JSON.stringify(json));
-  }    
+  }
   else if (uri == "/pullfromgithub") {
-    
+
     console.log("/pullfromgithub called");
-    
+
     var stdout = pullFromGithubSync();
-    
+
     var json = {
       success: true,
       desc: "Pulled from Github",
       log: stdout
     }
-    
+
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
     res.end(JSON.stringify(json));
-    
-  }    
+
+  }
   else if (uri == "/mergeFromCpTemplateRepo") {
-    
+
     console.log("/mergeFromCpTemplateRepo called");
-    
+
     var stdout = mergeFromCpTemplateRepo();
-    
+
     var json = {
       success: true,
       desc: "Merged the latest ChiliPeppr Template to this repo. Please check for merge conflicts. You can run \"git status\" for a summary of conflicts, if any.",
       log: stdout
     }
-    
+
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
     res.end(JSON.stringify(json));
-    
-  } else {
+
+  }
+  else {
 
     var filename = path.join(process.cwd(), unescape(uri));
     var stats;
-  
+
     try {
       stats = fs.lstatSync(filename); // throws if path doesn't exist
     }
@@ -123,14 +124,14 @@ http.createServer(function(req, res) {
       res.end();
       return;
     }
-  
+
     if (stats.isFile()) {
       // path exists, is a file
       var mimeType = mimeTypes[path.extname(filename).split(".").reverse()[0]];
       res.writeHead(200, {
         'Content-Type': mimeType
       });
-  
+
       var fileStream = fs.createReadStream(filename);
       fileStream.pipe(res);
     }
@@ -152,14 +153,14 @@ http.createServer(function(req, res) {
       res.write('500 Internal server error\n');
       res.end();
     }
-    
+
   }
 
 }).listen(process.env.PORT);
 
 String.prototype.regexIndexOf = function(regex, startpos) {
-    var indexOf = this.substring(startpos || 0).search(regex);
-    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+  var indexOf = this.substring(startpos || 0).search(regex);
+  return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
 }
 
 var fileAutoGeneratePath = "auto-generated-workspace.html"
@@ -168,35 +169,35 @@ var fileCssPath = "workspace.css"
 var fileHtmlPath = "workspace.html"
 
 var widgetUrl = 'http://' +
-    process.env.C9_PROJECT + '-' + process.env.C9_USER +
-    '.c9users.io/workspace.html';
+  process.env.C9_PROJECT + '-' + process.env.C9_USER +
+  '.c9users.io/workspace.html';
 var testUrl = 'https://preview.c9users.io/' +
-    process.env.C9_USER + '/' +
-    process.env.C9_PROJECT + '/' + fileHtmlPath;
+  process.env.C9_USER + '/' +
+  process.env.C9_PROJECT + '/' + fileHtmlPath;
 var testUrlNoSsl = 'http://' + process.env.C9_PROJECT +
-    '-' + process.env.C9_USER + '.c9users.io/' + fileHtmlPath;
+  '-' + process.env.C9_USER + '.c9users.io/' + fileHtmlPath;
 var editUrl = 'http://ide.c9.io/' +
-    process.env.C9_USER + '/' +
-    process.env.C9_PROJECT;
+  process.env.C9_USER + '/' +
+  process.env.C9_PROJECT;
 var github;
 
 var widgetSrc, widget, id, deps, cpdefine, requirejs, cprequire_test;
 var widgetDocs = {};
 
 var init = function() {
-    github = getGithubUrl();
+  github = getGithubUrl();
 }
 
 var isEvaled = false;
 var evalWidgetJs = function() {
-  
+
   if (isEvaled) return;
-  
+
   // This method reads in your widget.js and evals it to
   // figure out all the info from it to generate docs and sample
   // code to make your life easy
-  widgetSrc = fs.readFileSync(fileJsPath)+'';
-  
+  widgetSrc = fs.readFileSync(fileJsPath) + '';
+
   // fill in some auto fill stuff
   /*
   var widgetUrl = 'http://' +
@@ -214,18 +215,18 @@ var evalWidgetJs = function() {
   widgetSrc = widgetSrc.replace(/(fiddleurl\s*:\s*['"]?)\(auto fill by runme\.js\)/, "$1" + editUrl);
   widgetSrc = widgetSrc.replace(/(githuburl\s*:\s*['"]?)\(auto fill by runme\.js\)/, "$1" + github.url);
   widgetSrc = widgetSrc.replace(/(testurl\s*:\s*['"]?)\(auto fill by runme\.js\)/, "$1" + widgetUrl);
-  
+
   // rewrite the javascript
   //fs.writeFileSync(fileJsPath, widgetSrc);
-  
+
   console.log("before we eval here is the src:", widgetSrc);
   eval(widgetSrc);
   //console.log("evaled the widget.js");
   //isEvaled = true;
-  
+
   // generate docs
   for (var key in widget) {
-    
+
     var obj = widget[key];
     widgetDocs[key] = {
       type: typeof obj,
@@ -236,7 +237,7 @@ var evalWidgetJs = function() {
       descMd: "", // markdown
     };
     var objDoc = widgetDocs[key];
-    
+
     if (typeof obj === 'function') {
 
       // grab first line of source code
@@ -246,15 +247,15 @@ var evalWidgetJs = function() {
       //srcFirstLine = srcFirstLine.replace(/function\s*\(\s*\)\s*\{/, "");
       objDoc.descHtml = srcFirstLine; // + "<br><br>";
       objDoc.descMd = srcFirstLine; // + "\n\n";
-      
+
       // we have the source code for the function, so go find it, but then
       // look at the comments above it
       //var indx = widgetSrc.indexOf(obj.toString());
       var indx = widgetSrc.regexIndexOf(new RegExp(key + "\\s*?:\\s*?function"));
       if (indx > 0) {
-        
+
         //s += "found index " + indx;  
-        
+
         // extract docs from above this method
         var docItem = extractDocs(indx);
         if (docItem.html.length > 0) {
@@ -267,21 +268,22 @@ var evalWidgetJs = function() {
         }
         objDoc.descSrc += docItem.src;
       }
-      
-    } else if (typeof obj === 'string') {
+
+    }
+    else if (typeof obj === 'string') {
       objDoc.descSrc = JSON.stringify(obj);
-      
+
       // if there's a default value then put it in docs
       if (obj.length > 0) {
         //objDoc.descHtml += "Default value: " + JSON.stringify(obj);
         objDoc.descHtml += JSON.stringify(obj);
         objDoc.descMd += JSON.stringify(obj);
       }
-      
+
       // see if any docs in src code
       var indx = widgetSrc.regexIndexOf(new RegExp(key + "\\s*?:"));
       if (indx > 0) {
-        
+
         // extract docs from above this method
         var docItem = extractDocs(indx);
         if (docItem.html.length > 0) {
@@ -295,19 +297,20 @@ var evalWidgetJs = function() {
         objDoc.descSrc += docItem.src;
       }
 
-      
-    } else {
+
+    }
+    else {
       objDoc.descSrc = JSON.stringify(obj, null, "  ");
-      
+
       if (key.match(/publish|subscribe|foreignPublish|foreignSubscribe/)) {
         objDoc.descHtml += "Please see docs above.";
-      } 
-      
+      }
+
       // look for description above or at end of line of source code
 
       var indx = widgetSrc.regexIndexOf(new RegExp(key + "\\s*?:"));
       if (indx > 0) {
-        
+
         // extract docs from above this method
         var docItem = extractDocs(indx);
         if (docItem.html.length > 0) {
@@ -329,29 +332,29 @@ var evalWidgetJs = function() {
 // We are passed in an indx which is where we start in the overall
 // widgetSrc. We look backwards, i.e. line/lines above for comments
 var extractDocs = function(indx) {
-  
+
   var o = {
     html: "", // html docs
-    src: "",  // src docs
-    md: ""    // markdown docs
+    src: "", // src docs
+    md: "" // markdown docs
   }
-  
+
   // if there is a */ up to this indx we've got a comment
   // reverse string to search backwards
   var partial = widgetSrc.substring(0, indx);
   var widgetSrcRev = reverseStr(partial);
   //console.log("candidate for " + key + ":", widgetSrcRev.substring(0, 100));
-  
+
   // if the next item in rev str is /* then we have a comment
   if (widgetSrcRev.match(/^[\s\r\n]+\/\*/)) {
-    
+
     // search to **/ which is /**
     var indx2 = widgetSrcRev.indexOf("**/");
     var comment = widgetSrcRev.substring(0, indx2);
     comment = reverseStr(comment);
     //console.log("comment for " + key + ":", comment);
     o.src = comment;
-    
+
     // cleanup
     comment = comment.replace(/[\r\n\s\*\/]+$/, ""); // cleanup end
     var lines = comment.split(/\r?\n/);
@@ -363,18 +366,18 @@ var extractDocs = function(indx) {
     }
     comment = newlines.join("\n");
     comment = comment.replace(/^[\s\r\n]/, ""); // cleanup beginning
-    
+
     // convert two newlines to <br><br>
     comment = comment.replace(/\n\n/g, "<br><br>");
-    
+
     // put more space in front of @param
     comment = comment.replace(/\@param\s+?(\S+)\s+?(\S+)\s*?\-?\s*?/g, "<br><br><b>$2</b> ($1) ");
-    
+
     //console.log("clean comment for " + key + " " + comment);
     o.html += comment;
     // make it work for markdown
     o.md += comment.replace("<br><br>", "\n\n").replace(/<b>|<\/b>/g, "");
-    
+
   }
   return o;
 }
@@ -395,7 +398,7 @@ var generateWidgetReadme = function() {
 
   // First we have to eval so stuff is in memory
   evalWidgetJs();
-  
+
   // Spit out Markdown docs
   var md = `# $widget-id
 $widget-desc
@@ -580,15 +583,15 @@ will you build on top of it?
   md = md.replace(/\$widget-editurl/g, editUrl);
   md = md.replace(/\$widget-giturl/g, github.url);
   md = md.replace(/\$widget-testurl/g, testUrl);
-  
+
   var cpload = generateCpLoadStmt();
   md = md.replace(/\$widget-cploadjs/g, cpload);
 
   // see if there is a screenshot, if so use it
   var img = "";
   if (fs.existsSync("screenshot.png")) {
-    img = "![alt text]" + 
-    "(screenshot.png \"Screenshot\")";
+    img = "![alt text]" +
+      "(screenshot.png \"Screenshot\")";
   }
   md = md.replace(/\$widget-img/g, img);
 
@@ -619,8 +622,8 @@ will you build on top of it?
   s = appendKeyValForMarkdown(widget.foreignSubscribe);
   md = md.replace(/\$widget-foreignsubscribe/, s);
   */
-  
-    // do the properties and methods
+
+  // do the properties and methods
   var s = "";
   for (var key in widget) {
     var txt = widgetDocs[key].descHtml + '';
@@ -652,31 +655,32 @@ will you build on top of it?
   // now write out the auto-gen file
   fs.writeFileSync("README.md", md);
   console.log("Rewrote README.md");
-  
+
 }
 
 var appendKeyValForMarkdown = function(data, id) {
   var str = "";
   if (data != null && typeof data === 'object' && Object.keys(data).length > 0) {
-        
+
     //var keys = Object.keys(data);
     for (var key in data) {
       str += '| /' + widget.id + "" + key + ' | ' + data[key].replace(/\n/, "<br>") + ' |';
     }
-  } else {
+  }
+  else {
     str = '| (No signals defined in this widget/element) |';
   }
   return str;
 }
 
 var generateWidgetDocs = function() {
-  
+
   // First we have to eval so stuff is in memory
   evalWidgetJs();
-  
+
   // Spit out docs
   var html = "";
-  
+
   html += `
     <html>
     <head>
@@ -1012,7 +1016,7 @@ var generateWidgetDocs = function() {
     process.env.C9_PROJECT;
   var github = getGithubUrl();
   */
-  
+
   html = html.replace(/\$pubsub-id/g, widget.id);
   html = html.replace(/\$pubsub-name/g, widget.name);
   html = html.replace(/\$pubsub-desc/g, widget.desc);
@@ -1021,10 +1025,10 @@ var generateWidgetDocs = function() {
   html = html.replace(/\$pubsub-github/g, github.url);
   html = html.replace(/\$pubsub-testurlnossl/g, testUrlNoSsl);
   html = html.replace(/\$pubsub-testurl/g, testUrl);
-  
+
   var cpload = generateCpLoadStmt();
   html = html.replace(/\$cp-load-stmt/g, cpload);
-  
+
   // do the properties and methods
   var s = "";
   for (var key in widget) {
@@ -1047,7 +1051,7 @@ var generateWidgetDocs = function() {
   html = html.replace(/\$row-foreign-publish-start[\s\S]+?\$row-foreign-publish-end/, s);
   s = appendKeyVal(widget.foreignSubscribe);
   html = html.replace(/\$row-foreign-subscribe-start[\s\S]+?\$row-foreign-subscribe-end/g, s);
-  
+
   // debug source for widget
   /*
   html = html.replace(
@@ -1069,51 +1073,52 @@ var reverseStr = function(s) {
 var appendKeyVal = function(data, id) {
   var str = "";
   if (data != null && typeof data === 'object' && Object.keys(data).length > 0) {
-        
+
     //var keys = Object.keys(data);
     for (var key in data) {
-      
+
       // clean up the description text
       var txt = data[key] + '';
       // get rid of spaces and returns after closing pre tags cuz it messes up github markdown
       txt = txt.replace(/<\/pre>[\s\r\n]*/ig, "</pre>");
       // convert double newlines to <br><br> tags
       txt = txt.replace(/\n\s*\n\s*/g, "<br><br>");
-      
-      str += '<tr valign="top"><td>/' + 
-        widget.id + "" + 
-        key + 
+
+      str += '<tr valign="top"><td>/' +
+        widget.id + "" +
+        key +
         '</td><td>' +
-        txt + 
+        txt +
         '</td></tr>';
     }
-  } else {
+  }
+  else {
     str = '<tr><td colspan="2">(No signals defined in this workspace)</td></tr>';
   }
   return str;
 }
 
 var generateCpLoadStmt = function() {
-  
+
   // eval the widget.js so we have lots of data on it
   evalWidgetJs();
-  
+
   // see if we have a backing github url
   // if we do, use it for the chilipeppr.load()
   // if not, we'll have to use the preview url from cloud9
   var github = getGithubUrl();
-  
+
   var js = "";
-  
+
   if (github != null) {
-    
+
     var url = github.url;
-    
+
     // since we have a github url, use the raw version
     // wa want something like https://raw.githubusercontent.com/chilipeppr/eagle-brd-import/master/auto-generated-widget.html";
     var rawurl = github.rawurl; //= url.replace(/\/github.com\//i, "/raw.githubusercontent.com/");
     //rawurl += '/master/auto-generated-widget.html';
-    
+
     // create a camel case version of this name. split on dash
     var arr = widget.id.replace(/com-chilipeppr/i, "").split(/-/g);
     // now capitalize the first letter of each word
@@ -1123,7 +1128,7 @@ var generateCpLoadStmt = function() {
       arr[i] = s;
     }
     var idCamelCase = arr.join("");
-    
+
     js = '' +
       '// This code should be pasted into the ChiliPeppr Edit Boot Javascript dialog box\n' +
       '// located in the upper right corner of any chilipeppr.com page.\n' +
@@ -1146,13 +1151,14 @@ var generateCpLoadStmt = function() {
       '  }\n' +
       ');\n' +
       '';
-      
-  } else {
+
+  }
+  else {
     // use preview url from cloud 9.
     // TODO
     js = "No Github backing URL. Not implemented yet.";
   }
-  
+
   return js;
 }
 
@@ -1168,9 +1174,9 @@ var pushToGithub = function() {
 }
 
 var pushToGithubSync = function() {
-  
+
   var proc = require('child_process');
-  
+
   // git add *
   // git commit -m "Made some changes to ChiliPeppr widget using Cloud9"
   // git push
@@ -1180,7 +1186,7 @@ var pushToGithubSync = function() {
   stdout += "> git push\n";
   stdout += proc.execSync('git add *; git commit -m "Made some changes to ChiliPeppr myWorkspace using Cloud9"; git push;', { encoding: 'utf8' });
   console.log("Pushed to github sync. Stdout:", stdout);
-  
+
   return stdout;
 }
 
@@ -1204,7 +1210,7 @@ var pushToGithubAsync = function() {
 
 var pullFromGithubSync = function() {
   var proc = require('child_process');
-  
+
   // git add *
   // git commit -m "Made some changes to ChiliPeppr widget using Cloud9"
   // git push
@@ -1212,13 +1218,13 @@ var pullFromGithubSync = function() {
   stdout += "> git pull\n";
   stdout += proc.execSync('git pull', { encoding: 'utf8' });
   console.log("Pulled from github sync. Stdout:", stdout);
-  
+
   return stdout;
 }
 
 var mergeFromCpTemplateRepo = function() {
   var proc = require('child_process');
-  
+
   // git add *
   // git commit -m "Made some changes to ChiliPeppr widget using Cloud9"
   // git push
@@ -1228,12 +1234,13 @@ var mergeFromCpTemplateRepo = function() {
   stdout += "> git pull https://github.com/chilipeppr/myWorkspace-template.git\n";
   try {
     stdout += proc.execSync('git checkout master; git pull https://github.com/chilipeppr/myWorkspace-template.git', { encoding: 'utf8' });
-  } catch (ex) {
+  }
+  catch (ex) {
     console.log("error on merge:", ex);
     stdout += "Tiny little error on merge.\n";
   }
   console.log("Pulled from github sync. Stdout:", stdout);
-  
+
   return stdout;
 }
 
@@ -1262,12 +1269,14 @@ var generateInlinedFile = function() {
   if (widget) {
     var re = /<title>[\s\r\n]*<!--\(auto-fill by runme\.js-->[\s\r\n]*<\/title>/i;
     if (fileHtml.match(re)) {
-    fileHtml = fileHtml.replace(re, "<title>" + widget.name + "</title>");
-    console.log("Swapped in title for final HTML page.");
-    } else {
+      fileHtml = fileHtml.replace(re, "<title>" + widget.name + "</title>");
+      console.log("Swapped in title for final HTML page.");
+    }
+    else {
       console.log('Went to swap in title, but the auto fill comment not found.');
     }
-  } else {
+  }
+  else {
     console.log("Could not auto-fill title of HTML page because widget object not defined.");
   }
 
@@ -1290,7 +1299,7 @@ var generateInlinedFile = function() {
 
   // now write out the auto-gen file
   fs.writeFileSync(fileAutoGeneratePath, fileHtml);
-  console.log("Updated " + fileAutoGeneratePath );
+  console.log("Updated " + fileAutoGeneratePath);
 
 }
 
@@ -1322,20 +1331,20 @@ var getMainPage = function() {
 
   generateInlinedFile();
   html += '<br><br>Just updated your ' + fileAutoGeneratePath + ' file.';
-    
+
   //pushToGithub();
   //html += '<br><br>Just pushed updates to your Github repo.';
-  
+
   var jsLoad = generateCpLoadStmt();
   html += '<br><br>Sample chilipeppr.load() Javascript for Your Workspace\n<pre>' +
     jsLoad +
     '</pre>\n';
-    
+
   var docs = generateWidgetDocs();
   html += '<br><br>Docs\n<pre>' +
     docs +
     '</pre>\n';
-    
+
   return html;
 }
 
@@ -1343,7 +1352,7 @@ var getGithubUrl = function(callback) {
 
   // new approach. use the command line from git
   // git config --get remote.origin.url
-  
+
   var childproc = require('child_process');
   var cmd = 'git config --get remote.origin.url';
 
@@ -1353,21 +1362,21 @@ var getGithubUrl = function(callback) {
   var re = /.*github.com:/i;
   var url = stdout.replace(re, "");
   url = url.replace(/.git[\s\S]*$/i, ""); // remove end
-  
+
   // prepend with clean githut url
   url = "http://github.com/" + url;
-  
+
   var rawurl = url.replace(/\/github.com\//i, "/raw.githubusercontent.com/");
   rawurl += '/master/' + fileAutoGeneratePath;
-  
+
   var ret = {
     url: url,
-    rawurl : rawurl
+    rawurl: rawurl
   };
-  
+
   //console.log("ret:", ret);
   return ret;
-    
+
 }
 
 init();
