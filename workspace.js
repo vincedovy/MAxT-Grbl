@@ -1073,10 +1073,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 console.log("updateAxesFromStatus:", axes);
 
                                 var coords = {
-                                        x: null,
-                                        y: null,
-                                        z: null
-                                    } //create local object to edit
+                                    x: null,
+                                    y: null,
+                                    z: null
+                                } //create local object to edit
 
                                 //first, we may need to convert units to match 3d viewer
                                 if (axes.unit == "mm" && xyz.currentUnits === "inch") {
@@ -1329,11 +1329,31 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // com-chilipeppr-grbl
 
             console.log('WORKSPACE: loading grbl widget');
-
+            var queryString = document.location.search;
+            if (queryString.indexOf('?') === 0) {
+                queryString = queryString.substr(1);
+            }
+            var parts = queryString.split('&');
+            var queryDictionary = {};
+            for (var i = 0; i < parts.length; i++) {
+                var p = parts[i];
+                var keyValuePair = p.split('=');
+                var key = keyValuePair[0];
+                var value = keyValuePair[1];
+                value = decodeURIComponent(value);
+                value = value.replace(/\+/g, ' ');
+                queryDictionary[key] = value;
+            }
+            var grblWidgetUrl = '';
+            if (queryDictionary['jDebug'] != 'undefined' && queryDictionary['jDebug'] == 1) {
+                grblWidgetUrl = "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html"
+            }
+            else {
+                grblWidgetUrl = "https://raw.githubusercontent.com/jpadie/grbl1-test-widget/62452538a02a3b9ac34c0ed842781f98760fef97/auto-generated-widget.html";
+            }
             chilipeppr.load(
                 "#com-chilipeppr-widget-grbl-instance",
-                "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html",
-
+                grblWidgetUrl,
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-grbl"], //"inline:com-chilipeppr-widget-spconsole"],
