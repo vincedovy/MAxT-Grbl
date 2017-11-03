@@ -999,8 +999,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             console.log('WORKSPACE: loading axis widget');
             chilipeppr.load(
                 "com-chilipeppr-xyz-instance",
-                "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
+      //          "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
+                    "http://raw.githubusercontent.com/chilipeppr-grbl/widget-grbl-xyz/master/auto-generated-widget.html",
 
+      
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-xyz"],
