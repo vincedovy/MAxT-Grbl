@@ -794,7 +794,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             console.log('WORKSPACE: loading drag drop widget');
 
             chilipeppr.load("#com-chilipeppr-ws-gcode-dragdrop",
-                            "http://raw.githubusercontent.com/chilipeppr/elem-dragdrop/master/auto-generated-widget.html",
+                "http://raw.githubusercontent.com/chilipeppr/elem-dragdrop/master/auto-generated-widget.html",
                 function() {
                     require(["inline:com-chilipeppr-elem-dragdrop"], function(dd) {
                         console.log("inside require of dragdrop");
@@ -827,7 +827,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             console.log('WORKSPACE: loading billboard');
             chilipeppr.load(
                 "#com-chilipeppr-ws-gcode-menu-billboard",
-                 "http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html");
+                "http://raw.githubusercontent.com/chilipeppr/widget-pubsubviewer/master/auto-generated-widget.html");
 
             //Unsure what the purpose of this is; loading the wrong widgets. 
             // MODIFY
@@ -999,10 +999,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             console.log('WORKSPACE: loading axis widget');
             chilipeppr.load(
                 "com-chilipeppr-xyz-instance",
-      //          "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
-                    "http://raw.githubusercontent.com/chilipeppr-grbl/widget-grbl-xyz/master/auto-generated-widget.html",
+                //          "http://fiddle.jshell.net/chilipeppr/gh45j/97/show/light/",
+                "http://raw.githubusercontent.com/chilipeppr-grbl/widget-grbl-xyz/master/auto-generated-widget.html",
 
-      
+
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-xyz"],
@@ -1275,10 +1275,10 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             // http://jsfiddle.net/chilipeppr/rczajbx0/
             console.log('WORKSPACE: loading serial port log');
             chilipeppr.load("#com-chilipeppr-serialport-log",
-              "http://raw.githubusercontent.com/chilipeppr/widget-console/master/auto-generated-widget.html",
+                "http://raw.githubusercontent.com/chilipeppr/widget-console/master/auto-generated-widget.html",
 
-               
-               // "http://fiddle.jshell.net/chilipeppr/rczajbx0/show/light/",
+
+                // "http://fiddle.jshell.net/chilipeppr/rczajbx0/show/light/",
 
                 function() {
                     cprequire(
@@ -1308,7 +1308,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             spc.onRecvLine = newOnRecvLine;
                             spc.jsonOnQueue = newJsonOnQueue;
 
-                            spc.init(true, /^ok|^\n/);
+                            spc.init(true, /^ok|^\n|^\[G|^</);
 
                             // resize this console on a browser resize
                             $(window).on('resize', function(evt) {
@@ -1394,17 +1394,23 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 //"http://fiddle.jshell.net/chilipeppr/vetj5fvx/show/light/",
                 "http://raw.githubusercontent.com/chilipeppr/widget-spjs/master/auto-generated-widget.html",
 
-          
+
                 function() {
                     cprequire(
                         ["inline:com-chilipeppr-widget-serialport"],
 
+
                         function(sp) {
                             sp.setSingleSelectMode();
                             //sp.init("192.168.1.7");
-                            sp.init(null, "grbl");
+                            var params = {
+                                isSingleSelectMode: true,
+                                defaultBuffer: "grbl",
+                                defaultBaud: 115200,
+                                bufferEncouragementMsg: 'For your device please choose the "grbl" buffer in the pulldown and a 115200 baud rate before connecting.'
+                            };
+                            sp.init(params);
                             //$('.com-chilipeppr-widget-serialport-console').removeClass("hidden");
-                            //$('.com-chilipeppr-widget-serialport-consoleinput').removeClass("hidden");
                             //$('.com-chilipeppr-widget-serialport-status').removeClass("hidden");
                         });
                 });
