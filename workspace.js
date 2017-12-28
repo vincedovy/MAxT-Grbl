@@ -530,7 +530,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                             g += "G0 Z" + that.clearanceHeight + "\n";
                                             var x = hole.X - gdiameter;
                                             var y = hole.Y - gdiameter;
-                                            g += "G0 X" + x + " Y" + y + "\n";
+                                            g += "G0 X" + x.toFixed(4) + " Y" + y.toFixed(4) + "\n";
                                             for (var i = 0; i < stepDownPasses; i++) {
                                                 var z = that.stepDownDimensions * (i + 1);
                                                 if (z < that.depthOfDimensions)
