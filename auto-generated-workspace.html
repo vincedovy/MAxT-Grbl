@@ -677,6 +677,48 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     console.log("Eagle BRD instantiated. eagleInstance:", that.eagleInstance);
                                     that.eagleInstance.init();
                                     //eagleInstance.activateWidget();
+
+                                    var newExportGcodeMillHoles = function() {
+                                        var g = '';
+                                        if (!$('#com-chilipeppr-widget-eagle .use-milling').is(':checked')) return g;
+                                        var that = eagle;
+                                        var dir = $('#DirectionCutting').val();
+                                        //var diaOfEndmill = $('.dimension-mill-diameter').val();
+                                        var diaOfEndmill = that.millDiameterMin;
+                                        if ((!$('#com-chilipeppr-widget-eagle .use-drilling').is(':checked')) ||
+                                            eagle.holesToMill.length == 0)
+                                            return g;
+                                        g += "(------ MILLING HOLES -------)\n";
+                                        g += "M5 (spindle off)\n";
+                                        g += "T" + ++eagle.toolCount + " M6 (Milling holes/board dimensions)\n";
+                                        g += "(T" + eagle.toolCount + " D=" + diaOfEndmill + "mm - PCB End Mill)\n";
+                                        g += "M3 S" + eagle.spindleRPM + " (spindle on)\n";
+                                        g += "F" + eagle.feedRateDimensions + "\n";
+                                        eagle.holesToMill.forEach(function(hole) {
+                                            //g += that.generateGcodeHole(hole.D, hole.X, hole.Y)
+                                            var radius = hole.D / 2;
+                                            var gdiameter = radius - (that.millDiameter / 2); // inside milling 
+                                            var stepDownPasses = Math.round(that.depthOfDimensions / that.stepDownDimensions + .5);
+                                            g += '(generate hole at x:' + hole.X + ' y:' + hole.Y + ' with dia:' + hole.D + ' in ' + stepDownPasses + ' passes)' + "\n";
+                                            g += "F" + that.feedRateDimensions + "\n";
+                                            g += "G0 Z" + that.clearanceHeight + "\n";
+                                            var x = that.round(hole.X - gdiameter);
+                                            var y = that.round(hole.Y - gdiameter);
+                                            g += "G0 X" + x + " Y" + y + "\n";
+                                            for (var i = 0; i < stepDownPasses; i++) {
+                                                var z = that.stepDownDimensions * (i + 1);
+                                                if (z < that.depthOfDimensions)
+                                                    z = that.depthOfDimensions;
+                                                g += "G1 Z" + z.toFixed(4) + "\n"; //V5.2QUICKFIX
+                                                g += (dir == 2) ? "G2 I" : "G3 I";
+                                                g += gdiameter.toFixed(4);
+                                                g += "X" + x + " Y" + y + "\n";
+                                            }
+                                            g += "G0 Z" + that.clearanceHeight + "\n";
+                                        });
+                                        return g;
+                                    };
+                                    eagle.exportGcodeMillHoles = newExportGcodeMillHoles;
                                     if (callback) callback();
                                 });
                             }
