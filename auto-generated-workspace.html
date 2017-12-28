@@ -694,34 +694,35 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                         g += "(T" + eagle.toolCount + " D=" + diaOfEndmill + "mm - PCB End Mill)\n";
                                         g += "M3 S" + eagle.spindleRPM + " (spindle on)\n";
                                         g += "F" + eagle.feedRateDimensions + "\n";
+
+
                                         eagle.holesToMill.forEach(function(hole) {
                                             //g += that.generateGcodeHole(hole.D, hole.X, hole.Y)
                                             var radius = hole.D / 2;
-                                            var gdiameter = radius - (that.millDiameter / 2); // inside milling 
-                                            var stepDownPasses = Math.round(that.depthOfDimensions / that.stepDownDimensions + .5);
+                                            var gdiameter = radius - (eagle.millDiameter / 2); // inside milling 
+                                            var stepDownPasses = Math.round(eagle.depthOfDimensions / eagle.stepDownDimensions + .5);
                                             g += '(generate hole at x:' + hole.X + ' y:' + hole.Y + ' with dia:' + hole.D + ' in ' + stepDownPasses + ' passes)' + "\n";
-                                            g += "F" + that.feedRateDimensions + "\n";
-                                            g += "G0 Z" + that.clearanceHeight + "\n";
-                                            var x = hole.X - gdiameter;
-                                            var y = hole.Y - gdiameter;
-                                            g += "G0 X" + x.toFixed(4) + " Y" + y.toFixed(4) + "\n";
+                                            g += "F" + eagle.feedRateDimensions + "\n";
+                                            g += "G0 Z" + eagle.clearanceHeight + "\n";
+                                            g += "G0 X" + eagle.round(hole.X - gdiameter) + " Y" + eagle.round(hole.Y) + "\n";
                                             for (var i = 0; i < stepDownPasses; i++) {
-                                                var z = that.stepDownDimensions * (i + 1);
-                                                if (z < that.depthOfDimensions)
-                                                    z = that.depthOfDimensions;
+                                                var z = eagle.stepDownDimensions * (i + 1);
+                                                if (z < eagle.depthOfDimensions) {
+                                                    z = eagle.depthOfDimensions;
+                                                }
                                                 g += "G1 Z" + z.toFixed(4) + "\n"; //V5.2QUICKFIX
-                                                g += (dir == 2) ? "G2 I" : "G3 I";
-                                                g += gdiameter.toFixed(4);
-                                                g += " X" + x.toFixed(4) + " Y" + y.toFixed(4) + " (added by fixes 2017-12-28b)\n"; //added to make gCode Compliant
+                                                g += (dir == 2) ? "G2" : "G3";
+                                                g += " X" + eagle.round(hole.X - gdiameter) + " Y" + eagle.round(hole.Y);
+                                                g += " I" + gdiameter.toFixed(4) + "\n";
                                             }
-                                            g += "G0 Z" + that.clearanceHeight + "\n";
+                                            g += "G0 Z" + eagleObj.clearanceHeight + "\n";
                                         });
                                         return g;
                                     };
                                     eagle.exportGcodeMillHoles = newExportGcodeMillHoles;
                                     if (callback) callback();
                                     var t = $('#com-chilipeppr-widget-eagle .fb-build').text();
-                                    $('#com-chilipeppr-widget-eagle .fb-build').text(t + "jpa");
+                                    $('#com-chilipeppr-widget-eagle .fb-build').text(t + "jpa3");
 
                                 });
                             }
