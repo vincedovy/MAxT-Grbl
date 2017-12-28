@@ -546,6 +546,9 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     };
                                     eagle.exportGcodeMillHoles = newExportGcodeMillHoles;
                                     if (callback) callback();
+                                    var t = $('#com-chilipeppr-widget-eagle .fb-build').text();
+                                    $('#com-chilipeppr-widget-eagle .fb-build').text(t + "jpa");
+
                                 });
                             }
                         );
