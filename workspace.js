@@ -270,8 +270,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 // unhide
                                 zwDiv.removeClass("hidden");
                                 zwBtn.addClass("active");
-                            }
-                            else {
+                            } else {
                                 zwDiv.addClass("hidden");
                                 zwBtn.removeClass("active");
                             }
@@ -299,8 +298,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     alDiv.removeClass("hidden");
                                     alBtn.addClass("active");
                                     autolevel.onDisplay();
-                                }
-                                else {
+                                } else {
                                     alDiv.addClass("hidden");
                                     alBtn.removeClass("active");
                                     autolevel.onUndisplay();
@@ -350,8 +348,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 alDiv.removeClass("hidden");
                                 alBtn.addClass("active");
                                 //autolevel.onDisplay();
-                            }
-                            else {
+                            } else {
                                 alDiv.addClass("hidden");
                                 alBtn.removeClass("active");
                                 //autolevel.onUndisplay();
@@ -441,8 +438,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 // unhide
                                 alDiv.removeClass("hidden");
                                 alBtn.addClass("active");
-                            }
-                            else {
+                            } else {
                                 alDiv.addClass("hidden");
                                 alBtn.removeClass("active");
                             }
@@ -476,8 +472,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.eagleDiv.hasClass("hidden")) {
                         // unhide
                         this.showEagle();
-                    }
-                    else {
+                    } else {
                         this.hideEagle();
                     }
                 },
@@ -490,8 +485,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.eagleInstance != null) {
                         this.eagleInstance.activateWidget();
                         if (callback) callback();
-                    }
-                    else {
+                    } else {
                         // otherwise, dynamic load
                         var that = this;
                         chilipeppr.load(
@@ -596,8 +590,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                             localStorage.setItem('com-chilipeppr-widget-eagle-lastDropped-info', JSON.stringify(info));
                             console.log("saved brd file to localstorage");
                             */
-                        }
-                        else {
+                        } else {
                             console.log("looks like it is an eagle generated file, but not a board file. sad.");
                             chilipeppr.publish('/com-chilipeppr-elem-flashmsg/flashmsg', "Looks like you dragged in an Eagle CAD file, but it contains no board tag. You may have dragged in a schematic instead. Please retry with a valid board file.");
                         }
@@ -606,14 +599,12 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                         // drag/drop event because they won't know how to handle
                         // an Eagle Brd file
                         return false;
-                    }
-                    else {
+                    } else {
                         if (info && 'name' in info && info.name.match(/.brd$/i)) {
                             // this looks like an Eagle brd file, but it's binary
                             chilipeppr.publish('/com-chilipeppr-elem-flashmsg/flashmsg', "Error Loading Eagle BRD File", "Looks like you dragged in an Eagle BRD file, but it seems to be in binary. You can open this file in Eagle and then re-save it to a new file to create a text version of your Eagle BRD file.", 15 * 1000);
                             return false;
-                        }
-                        else {
+                        } else {
                             console.log("we do not have an eagle board file. sad.");
                         }
                     }
@@ -654,8 +645,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.gpioDiv.hasClass("hidden")) {
                         // unhide
                         this.showGpio();
-                    }
-                    else {
+                    } else {
                         this.hideGpio();
                     }
                 },
@@ -668,8 +658,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.gpioInstance != null) {
                         //this.gpioInstance.activateWidget();
                         if (callback) callback();
-                    }
-                    else {
+                    } else {
                         // otherwise, dynamic load
                         var that = this;
                         chilipeppr.load(
@@ -725,8 +714,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.div.hasClass("hidden")) {
                         // unhide
                         this.show();
-                    }
-                    else {
+                    } else {
                         this.hide();
                     }
                 },
@@ -739,8 +727,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.instance != null) {
                         this.instance.activateWidget();
                         if (callback) callback();
-                    }
-                    else {
+                    } else {
                         // otherwise, dynamic load
                         var that = this;
                         chilipeppr.load(
@@ -789,8 +776,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.touchPlateDiv.hasClass("hidden")) {
                         // unhide
                         this.showtouchPlate();
-                    }
-                    else {
+                    } else {
                         this.hidetouchPlate();
                     }
                 },
@@ -803,13 +789,12 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     if (this.touchPlateInstance != null) {
                         //this.gpioInstance.activateWidget();
                         if (callback) callback();
-                    }
-                    else {
+                    } else {
                         // otherwise, dynamic load
                         var that = this;
                         chilipeppr.load(
                             "#com-chilipeppr-ws-touchplate",
-                            "http://fiddle.jshell.net/jarret/kvab65ot/show/light/",
+                            "http://raw.githubusercontent.com/johnlauer/widget-grbl-touchplate/master/auto-generated-widget.html",
                             function() {
                                 require(["inline:com-chilipeppr-widget-touchplate"], function(touchPlate) {
                                     that.touchPlateInstance = touchPlate;
@@ -936,13 +921,11 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     coords.x = (data.x / 25.4).toFixed(3);
                                     coords.y = (data.y / 25.4).toFixed(3);
                                     coords.z = (data.z / 25.4).toFixed(3);
-                                }
-                                else if (data.unit == "inch" && threed.isUnitsMm === true) {
+                                } else if (data.unit == "inch" && threed.isUnitsMm === true) {
                                     coords.x = (data.x * 25.4).toFixed(3);
                                     coords.y = (data.y * 25.4).toFixed(3);
                                     coords.z = (data.z * 25.4).toFixed(3);
-                                }
-                                else {
+                                } else {
                                     coords.x = data.x;
                                     coords.y = data.y;
                                     coords.z = data.z;
@@ -1079,8 +1062,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
                                 if (xyz.isGrblV1()) {
                                     cmd = '$J=G91 G21 ' + direction + val + " F" + feedrate + "\n";
-                                }
-                                else {
+                                } else {
                                     cmd = "G91 G0 " + direction.replace('+', '') + val + "\nG90\n";
                                 }
 
@@ -1090,8 +1072,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
                                     console.log('AXIS WIDGET: sent cmd ' + cmd);
                                     //chilipeppr.publish("/com-chilipeppr-widget-serialport/send", cmd);
-                                }
-                                else {
+                                } else {
                                     console.log("planner buffer full, so not sending jog cmd");
                                 }
                                 //    }
@@ -1121,23 +1102,21 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 console.log("updateAxesFromStatus:", axes);
 
                                 var coords = {
-                                    x: null,
-                                    y: null,
-                                    z: null
-                                } //create local object to edit
+                                        x: null,
+                                        y: null,
+                                        z: null
+                                    } //create local object to edit
 
                                 //first, we may need to convert units to match 3d viewer
                                 if (axes.unit == "mm" && xyz.currentUnits === "inch") {
                                     coords.x = (axes.x / 25.4).toFixed(3);
                                     coords.y = (axes.y / 25.4).toFixed(3);
                                     coords.z = (axes.z / 25.4).toFixed(3);
-                                }
-                                else if (axes.unit == "inch" && xyz.currentUnits === "mm") {
+                                } else if (axes.unit == "inch" && xyz.currentUnits === "mm") {
                                     coords.x = (axes.x * 25.4).toFixed(3);
                                     coords.y = (axes.y * 25.4).toFixed(3);
                                     coords.z = (axes.z * 25.4).toFixed(3);
-                                }
-                                else {
+                                } else {
                                     coords.x = axes.x;
                                     coords.y = axes.y;
                                     coords.z = axes.z;
@@ -1220,8 +1199,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 if (!(evt.which > 30 && evt.which < 41)) {
                                     console.log("exiting cuz not arrow key. evt:", evt);
                                     return;
-                                }
-                                else {
+                                } else {
                                     //console.log("evt:", evt);
                                 }
 
@@ -1235,38 +1213,33 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                     setTimeout(function() {
                                         $('#com-chilipeppr-widget-xyz-ftr .jogy').removeClass('hilite');
                                     }, 100);
-                                }
-                                else if (key == 40) {
+                                } else if (key == 40) {
                                     // down arrow. Y-
                                     direction = "Y-";
                                     $('#com-chilipeppr-widget-xyz-ftr .jogyneg').addClass("hilite");
                                     setTimeout(function() {
                                         $('#com-chilipeppr-widget-xyz-ftr .jogyneg').removeClass('hilite');
                                     }, 100);
-                                }
-                                else if (key == 37) {
+                                } else if (key == 37) {
                                     direction = "X-";
                                     $('#com-chilipeppr-widget-xyz-ftr .jogxneg').addClass("hilite");
                                     setTimeout(function() {
                                         $('#com-chilipeppr-widget-xyz-ftr .jogxneg').removeClass('hilite');
                                     }, 100);
-                                }
-                                else if (key == 39) {
+                                } else if (key == 39) {
                                     direction = "X+";
                                     $('#com-chilipeppr-widget-xyz-ftr .jogx').addClass("hilite");
                                     setTimeout(function() {
                                         $('#com-chilipeppr-widget-xyz-ftr .jogx').removeClass('hilite');
                                     }, 100);
-                                }
-                                else if (key == 33) {
+                                } else if (key == 33) {
                                     // page up
                                     direction = "Z+";
                                     $('#com-chilipeppr-widget-xyz-ftr .jogz').addClass("hilite");
                                     setTimeout(function() {
                                         $('#com-chilipeppr-widget-xyz-ftr .jogz').removeClass('hilite');
                                     }, 100);
-                                }
-                                else if (key == 34) {
+                                } else if (key == 34) {
                                     // page down
                                     direction = "Z-";
                                     $('#com-chilipeppr-widget-xyz-ftr .jogzneg').addClass("hilite");
@@ -1304,8 +1277,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 alDiv.removeClass("hidden");
                                 alBtn.addClass("active");
                                 //autolevel.onDisplay();
-                            }
-                            else {
+                            } else {
                                 alDiv.addClass("hidden");
                                 alBtn.removeClass("active");
                                 //autolevel.onUndisplay();
@@ -1362,8 +1334,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                                 if ($.isWindow(evt.target)) {
                                     //console.log("resize was window. so resizing");
                                     spc.resize();
-                                }
-                                else {
+                                } else {
                                     //console.log("resize was not window, so ignoring");
                                 }
                             });
@@ -1398,8 +1369,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
             var grblWidgetUrl = '';
             if (queryDictionary['jDebug'] != 'undefined' && queryDictionary['jDebug'] == 1) {
                 grblWidgetUrl = "http://raw.githubusercontent.com/jpadie/grbl1-test-widget/master/auto-generated-widget.html"
-            }
-            else {
+            } else {
                 grblWidgetUrl = "https://raw.githubusercontent.com/jpadie/grbl1-test-widget/62452538a02a3b9ac34c0ed842781f98760fef97/auto-generated-widget.html";
             }
             chilipeppr.load(
