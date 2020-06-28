@@ -981,6 +981,7 @@
                             },
                             setupBtn: function() {
                                 this.touchPlateBtn.click(this.toggletouchPlate.bind(this));
+                                console.log("auto: setup touchplate");
                             },
                             toggletouchPlate: function() {
                                 if (this.touchPlateDiv.hasClass("hidden")) {
@@ -991,16 +992,19 @@
                                 }
                             },
                             showtouchPlate: function(callback) {
+                                console.log("auto: show touchplate");
                                 this.touchPlateDiv.removeClass("hidden");
                                 this.touchPlateBtn.addClass("active");
 
                                 // see if instantiated already
                                 // if so, just activate
                                 if (this.touchPlateInstance != null) {
+                                    console.log("auto: activating existing touchplate");
                                     this.touchPlateInstance.activateWidget();
                                     if (callback) callback();
                                 } else {
                                     // otherwise, dynamic load
+                                    console.log("auto: activating new touchplate");
                                     var that = this;
                                     chilipeppr.load(
                                         "#com-chilipeppr-ws-touchplate",
@@ -1019,6 +1023,7 @@
                                 $(window).trigger('resize');
                             },
                             hidetouchPlate: function() {
+                                console.log("auto: hide touchplate");
                                 this.touchPlateDiv.addClass("hidden");
                                 this.touchPlateBtn.removeClass("active");
                                 if (this.touchPlateInstance != null) {

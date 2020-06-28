@@ -770,6 +770,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     console.log("done instantiating touchPlate add-on widget");
                 },
                 setupBtn: function() {
+                    console.log("setup touchplate");
                     this.touchPlateBtn.click(this.toggletouchPlate.bind(this));
                 },
                 toggletouchPlate: function() {
@@ -781,16 +782,19 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     }
                 },
                 showtouchPlate: function(callback) {
+                    console.log("show touchplate")
                     this.touchPlateDiv.removeClass("hidden");
                     this.touchPlateBtn.addClass("active");
 
                     // see if instantiated already
                     // if so, just activate
                     if (this.touchPlateInstance != null) {
+                        console.log("touchplate already exists");
                         //this.gpioInstance.activateWidget();
                         if (callback) callback();
                     } else {
                         // otherwise, dynamic load
+                        console.log("loading touchplate");
                         var that = this;
                         chilipeppr.load(
                             "#com-chilipeppr-ws-touchplate",
@@ -809,6 +813,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     $(window).trigger('resize');
                 },
                 hidetouchPlate: function() {
+                    console.log("hide touchplate");
                     this.touchPlateDiv.addClass("hidden");
                     this.touchPlateBtn.removeClass("active");
                     if (this.touchPlateInstance != null) {
