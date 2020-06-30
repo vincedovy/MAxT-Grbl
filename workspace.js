@@ -758,7 +758,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
 
             console.log('WORKSPACE: loading touch plate widget');
-
+/*
             var touchPlateObj = {
                 touchPlateBtn: null,
                 touchPlateDiv: null,
@@ -823,7 +823,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 },
             };
             touchPlateObj.init();
-/*
+*/
             chilipeppr.load(
               "#com-chilipeppr-ws-touchplate",
               "http://raw.githubusercontent.com/johnlauer/widget-grbl-touchplate/master/auto-generated-widget.html",
@@ -836,11 +836,26 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                     // Callback that is passed reference to the newly loaded widget
                     console.log("Widget / GRBL Touch Plate just got loaded.", myObjWidgetTouchplate);
                     myObjWidgetTouchplate.init();
+                    // setup toggle button
+                    var touchBtn = $('#com-chilipeppr-ws-gcode-menu .touchplate-button');
+                    var touchDiv = $('#com-chilipeppr-ws-touchplate');
+                    touchBtn.click(function() {
+                        if (touchDiv.hasClass("hidden")) {
+                            // unhide
+                            touchDiv.removeClass("hidden");
+                            touchBtn.addClass("active");
+                        } else {
+                            touchDiv.addClass("hidden");
+                            touchBtn.removeClass("active");
+                        }
+                        $(window).trigger('resize');
+
+                    });
                   }
                 );
               }
             );
-*/            
+            
             
             // Element / Drag Drop
             // Load the dragdrop element into workspace toolbar
