@@ -758,7 +758,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
 
             console.log('WORKSPACE: loading touch plate widget');
-
+/*
             var touchPlateObj = {
                 touchPlateBtn: null,
                 touchPlateDiv: null,
@@ -823,7 +823,25 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 },
             };
             touchPlateObj.init();
-
+*/
+            chilipeppr.load(
+              "#com-chilipeppr-ws-touchplate",
+              "http://raw.githubusercontent.com/johnlauer/widget-grbl-touchplate/master/auto-generated-widget.html",
+              function() {
+                // Callback after widget loaded into #myDivWidgetTouchplate
+                // Now use require.js to get reference to instantiated widget
+                cprequire(
+                  ["inline:com-chilipeppr-widget-touchplate"], // the id you gave your widget
+                  function(myObjWidgetTouchplate) {
+                    // Callback that is passed reference to the newly loaded widget
+                    console.log("Widget / GRBL Touch Plate just got loaded.", myObjWidgetTouchplate);
+                    myObjWidgetTouchplate.init();
+                  }
+                );
+              }
+            );
+            
+            
             // Element / Drag Drop
             // Load the dragdrop element into workspace toolbar
             // http://jsfiddle.net/chilipeppr/Z9F6G/
