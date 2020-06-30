@@ -758,7 +758,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
 
 
             console.log('WORKSPACE: loading touch plate widget');
-/*
+
             var touchPlateObj = {
                 touchPlateBtn: null,
                 touchPlateDiv: null,
@@ -823,7 +823,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 },
             };
             touchPlateObj.init();
-*/
+/*
             chilipeppr.load(
               "#com-chilipeppr-ws-touchplate",
               "http://raw.githubusercontent.com/johnlauer/widget-grbl-touchplate/master/auto-generated-widget.html",
@@ -840,7 +840,7 @@ cpdefine("inline:com-chilipeppr-workspace-grbl", ["chilipeppr_ready"], function(
                 );
               }
             );
-            
+*/            
             
             // Element / Drag Drop
             // Load the dragdrop element into workspace toolbar
