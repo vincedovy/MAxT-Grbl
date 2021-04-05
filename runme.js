@@ -1362,6 +1362,7 @@ var getGithubUrl = function(callback) {
   var re = /.*github.com:/i;
   var url = stdout.replace(re, "");
   url = url.replace(/.git[\s\S]*$/i, ""); // remove end
+  console.log("Got the following URL: ", url);
 
   // prepend with clean githut url
   url = "http://github.com/" + url;
