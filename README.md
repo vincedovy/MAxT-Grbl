@@ -1,9 +1,9 @@
 # com-chilipeppr-MAxT-Grbl
-A ChiliPeppr Workspace grbl.
+A ChiliPeppr Workspace.
 
 
 
-## ChiliPeppr Workspace / grbl
+## ChiliPeppr Workspace / MAxT-Ggrbl
 
 All ChiliPeppr workspaces/widgets/elements are defined using cpdefine() which is a method
 that mimics require.js. Each defined object must have a unique ID so it does
@@ -12,8 +12,8 @@ not conflict with other ChiliPeppr objects.
 | Item                  | Value           |
 | -------------         | ------------- | 
 | ID                    | com-chilipeppr-MAxT-Grbl |
-| Name                  | Workspace / grbl |
-| Description           | A ChiliPeppr Workspace grbl. |
+| Name                  | Workspace / MAxT-Ggrbl |
+| Description           | A ChiliPeppr Workspace. |
 | chilipeppr.load() URL | http://raw.githubusercontent.com/https://master/auto-generated-workspace.html |
 | Edit URL              | http://ide.c9.io/Cloud9User/Home Workspace |
 | Github URL            | http://github.com/https:/ |
@@ -42,7 +42,7 @@ chilipeppr.load(
       ["inline:com-chilipeppr-MAxT-Grbl"], // the id you gave your workspace
       function(myMAxTGrbl) {
         // Callback that is passed reference to the newly loaded workspace
-        console.log("Workspace / grbl just got loaded.", myMAxTGrbl);
+        console.log("Workspace / MAxT-Ggrbl just got loaded.", myMAxTGrbl);
         myMAxTGrbl.init();
       }
     );
@@ -135,7 +135,7 @@ The table below shows, in order, the methods and properties inside the workspace
           </tr>
       </thead>
       <tbody>
-      <tr valign="top"><td>id</td><td>string</td><td>"com-chilipeppr-MAxT-Grbl"<br><br>The ID of the widget. You must define this and make it unique.</td></tr><tr valign="top"><td>name</td><td>string</td><td>"Workspace / grbl"</td></tr><tr valign="top"><td>desc</td><td>string</td><td>"A ChiliPeppr Workspace grbl."</td></tr><tr valign="top"><td>url</td><td>string</td><td>"http://raw.githubusercontent.com/https://master/auto-generated-workspace.html"</td></tr><tr valign="top"><td>fiddleurl</td><td>string</td><td>"http://ide.c9.io/Cloud9User/Home Workspace"</td></tr><tr valign="top"><td>githuburl</td><td>string</td><td>"http://github.com/https:/"</td></tr><tr valign="top"><td>testurl</td><td>string</td><td>"http://Home Workspace-Cloud9User.c9users.io/workspace.html"</td></tr><tr valign="top"><td>widgetConsole</td><td>object</td><td>Contains reference to the Console widget object. Hang onto the reference
+      <tr valign="top"><td>id</td><td>string</td><td>"com-chilipeppr-MAxT-Grbl"<br><br>The ID of the widget. You must define this and make it unique.</td></tr><tr valign="top"><td>name</td><td>string</td><td>"Workspace / MAxT-Ggrbl"</td></tr><tr valign="top"><td>desc</td><td>string</td><td>"A ChiliPeppr Workspace."</td></tr><tr valign="top"><td>url</td><td>string</td><td>"http://raw.githubusercontent.com/https://master/auto-generated-workspace.html"</td></tr><tr valign="top"><td>fiddleurl</td><td>string</td><td>"http://ide.c9.io/Cloud9User/Home Workspace"</td></tr><tr valign="top"><td>githuburl</td><td>string</td><td>"http://github.com/https:/"</td></tr><tr valign="top"><td>testurl</td><td>string</td><td>"http://Home Workspace-Cloud9User.c9users.io/workspace.html"</td></tr><tr valign="top"><td>widgetConsole</td><td>object</td><td>Contains reference to the Console widget object. Hang onto the reference
 so we can resize it when the window resizes because we want it to manually
 resize to fill the height of the browser so it looks clean.</td></tr><tr valign="top"><td>init</td><td>function</td><td>function () <br><br>The workspace's init method. It loads the all the widgets contained in the workspace
 and inits them.</td></tr><tr valign="top"><td>getBillboard</td><td>function</td><td>function () <br><br>Returns the billboard HTML, CSS, and Javascript for this Workspace. The billboard
